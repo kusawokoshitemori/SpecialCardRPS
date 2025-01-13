@@ -1,16 +1,15 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import App from "./App.tsx";
 import "./index.css";
 
-const App = () => {
-  return (
-    <div className="flex items-center justify-center h-screen bg-gray-100">
-      <h1 className="text-3xl font-bold text-blue-500">
-        Hello, Tailwind CSS!!!!!
-      </h1>
-    </div>
-  );
-};
+// ルート要素を取得してReactアプリをレンダリング
+const root = ReactDOM.createRoot(
+  document.getElementById("root") as HTMLElement
+);
 
-const root = ReactDOM.createRoot(document.getElementById("root")!);
-root.render(<App />);
+root.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
