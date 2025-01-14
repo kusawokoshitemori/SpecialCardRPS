@@ -1,4 +1,5 @@
 // app/layout.tsx
+import "../app/globals.css";
 export const metadata = {
   title: "My App",
   description: "A description of my app",
