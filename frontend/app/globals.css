@@ -1,3 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.blue-text-outline {
+  text-shadow: 1px 1px 2px black, 0 0 15px black, 0 0 5px darkblue;
+}

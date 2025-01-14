@@ -5,7 +5,7 @@ const About = () => {
   return (
     <div>
       <p>Aboutの要素</p>
-      <Button text="ここを押してね"></Button>
+      <Button text="オンライン"></Button>
     </div>
   );
 };
