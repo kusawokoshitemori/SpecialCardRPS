@@ -1,6 +1,6 @@
 import React from "react";
 import Button from "../components/elements/button/Button";
-import TitleRPS from "@/features/SelectGame/TitleRPS";
+import TitleRPS from "@/app/components/features/SelectGame/TitleRPS";
 import Link from "next/link";
 
 const SelectGame = () => {

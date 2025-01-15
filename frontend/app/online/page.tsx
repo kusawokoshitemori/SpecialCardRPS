@@ -1,5 +1,7 @@
+import TitleRPS from "../components/features/SelectGame/TitleRPS";
+
 const Online = () => {
-  return <div>オンラインページです</div>;
+  return <TitleRPS />;
 };
 
 export default Online;
