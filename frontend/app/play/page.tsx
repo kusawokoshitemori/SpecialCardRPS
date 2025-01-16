@@ -1,34 +1,34 @@
+"use client";
+
 import Card from "../components/elements/card/card";
+import HaveCard from "../components/elements/card/haveCard";
+import MiniButton from "../components/elements/button/miniButton";
+import FlipCard from "../components/elements/card/flipCard";
 
 const Play = () => {
+  const myHandSrc = "/images/rock.png";
+  const myTitle = "グー";
+  const enemyHand = "/images/paper.png";
+  const enemyTitle = "パー";
+
+  const handleClick = () => {
+    console.log("ボタンがクリックされました！");
+  };
   return (
     <div className="flex items-center justify-center flex-col">
       <div>タイマー</div>
       <div className="flex flex-row">
-        <div>自分の手が出るとこ</div>
-        <div>相手の手が出るとこ</div>
+        <Card imageSrc={myHandSrc} title={myTitle} />
+        <Card imageSrc={enemyHand} title={enemyTitle} />
       </div>
       <div className="flex flex-row">
-        <Card
-          imageSrc="/images/rock.png"
-          imageAlt="グー"
-          title="グー"
-          haveItem={2}
-        />
-        <Card
-          imageSrc="/images/scissors.png"
-          imageAlt="チョキ"
-          title="チョキ"
-          haveItem={2}
-        />
-        <Card
-          imageSrc="/images/paper.png"
-          imageAlt="パー"
-          title="パー"
-          haveItem={2}
-        />
+        <HaveCard imageSrc="/images/rock.png" title="グー" haveItem={2} />
+        <HaveCard imageSrc="/images/scissors.png" title="チョキ" haveItem={2} />
+        <HaveCard imageSrc="/images/paper.png" title="パー" haveItem={2} />
         <div>持っているカード4</div>
       </div>
+      <MiniButton text="決定" handleClick={handleClick} />
+      <FlipCard />
     </div>
   );
 };

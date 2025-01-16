@@ -2,6 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
+/* 文字の影 */
 .blue-text-outline {
   text-shadow: 1px 1px 2px black, 0 0 15px black, 0 0 5px darkblue;
+}
+
+/* 3D回転アニメーション */
+@layer utilities {
+  .rotate-y-180 {
+    transform: rotateY(180deg);
+  }
+  .backface-hidden {
+    backface-visibility: hidden;
+  }
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+  .transform-style-preserve-3d {
+    transform-style: preserve-3d;
+  }
 }
