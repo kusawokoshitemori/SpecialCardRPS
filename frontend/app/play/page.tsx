@@ -18,8 +18,10 @@ const Play = () => {
     <div className="flex items-center justify-center flex-col">
       <div>タイマー</div>
       <div className="flex flex-row">
+        {/* 自分のカード */}
         <Card imageSrc={myHandSrc} title={myTitle} />
-        <Card imageSrc={enemyHand} title={enemyTitle} />
+        {/* 相手のカード */}
+        <FlipCard imageSrc={enemyHand} title={enemyTitle} />
       </div>
       <div className="flex flex-row">
         <HaveCard imageSrc="/images/rock.png" title="グー" haveItem={2} />
@@ -28,7 +30,6 @@ const Play = () => {
         <div>持っているカード4</div>
       </div>
       <MiniButton text="決定" handleClick={handleClick} />
-      <FlipCard />
     </div>
   );
 };

@@ -3,8 +3,13 @@
 import { useState } from "react";
 import MiniButton from "../button/miniButton";
 import Card from "./card";
+import ReverseSide from "../reverseSide/reverseSide";
+interface FlipProps {
+  imageSrc: string;
+  title: string;
+}
 
-const FlipCard = () => {
+const FlipCard = ({ imageSrc, title }: FlipProps) => {
   // isFlippedがtrueなら裏面、falseなら表面
   const [isFlipped, setIsFlipped] = useState(false);
 
@@ -24,16 +29,12 @@ const FlipCard = () => {
       >
         {/* 表面 */}
         <Card
-          imageSrc="/images/rock.png"
-          title="グー"
+          imageSrc={imageSrc}
+          title={title}
           className="absolute overflow-hidden backface-hidden"
         />
         {/* 裏面 */}
-        <Card
-          imageSrc="/images/paper.png"
-          title="パー"
-          className="absolute overflow-hidden backface-hidden rotate-y-180"
-        />
+        <ReverseSide imageSrc="/images/reverseCard.png" />
       </div>
 
       {/* ボタンで裏返す */}

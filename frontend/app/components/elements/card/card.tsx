@@ -11,8 +11,8 @@ const Card: React.FC<CardProps> = ({ imageSrc, title, className }) => {
   return (
     <div
       className={classNames(
-        "flex items-center justify-center flex-col max-w-xs w-32 bg-white rounded-lg shadow-md overflow-hidden",
-        className // ここで追加クラスを結合
+        "flex items-center justify-center flex-col max-w-xs w-32 h-48 bg-white rounded-lg shadow-md overflow-hidden",
+        className
       )}
     >
       <Image
