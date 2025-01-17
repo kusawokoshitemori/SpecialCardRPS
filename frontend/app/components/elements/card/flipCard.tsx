@@ -11,7 +11,7 @@ interface FlipProps {
 
 const FlipCard = ({ imageSrc, title }: FlipProps) => {
   // isFlippedがtrueなら裏面、falseなら表面
-  const [isFlipped, setIsFlipped] = useState(false);
+  const [isFlipped, setIsFlipped] = useState(true);
 
   // カードの裏返し処理
   const toggleFlip = () => {

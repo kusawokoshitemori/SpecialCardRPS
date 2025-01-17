@@ -5,15 +5,17 @@ interface CardProps {
   imageSrc: string;
   title: string;
   className?: string;
+  onClick?: React.MouseEventHandler<HTMLDivElement>;
 }
 
-const Card: React.FC<CardProps> = ({ imageSrc, title, className }) => {
+const Card: React.FC<CardProps> = ({ imageSrc, title, className, onClick }) => {
   return (
     <div
       className={classNames(
         "flex items-center justify-center flex-col max-w-xs w-32 h-48 bg-white rounded-lg shadow-md overflow-hidden",
         className
       )}
+      onClick={onClick ? (event) => onClick(event) : undefined}
     >
       <Image
         src={imageSrc}

@@ -4,13 +4,19 @@ interface CardProps {
   imageSrc: string;
   title: string;
   haveItem: number;
+  onClick?: React.MouseEventHandler<HTMLDivElement>;
 }
 
-const HaveCard: React.FC<CardProps> = ({ imageSrc, title, haveItem }) => {
+const HaveCard: React.FC<CardProps> = ({
+  imageSrc,
+  title,
+  haveItem,
+  onClick,
+}) => {
   return (
     <div>
       <p className="flex justify-center text-3xl">x{haveItem}</p>
-      <Card imageSrc={imageSrc} title={title} />
+      <Card imageSrc={imageSrc} title={title} onClick={onClick} />
     </div>
   );
 };
