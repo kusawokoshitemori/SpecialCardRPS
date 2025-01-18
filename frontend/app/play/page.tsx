@@ -11,24 +11,31 @@ import ReverseSide from "../components/elements/reverseSide/reverseSide";
 const Play = () => {
   const [myHandSrc, setMyHandSrc] = useState("");
   const [myTitle, setMyTitle] = useState("");
+  const [isDecision, setIsDecision] = useState(false);
   const enemyHand = "/images/paper.png";
   const enemyTitle = "パー";
 
-  const handleClick = () => {
+  const decisionClick = () => {
     console.log(myHandSrc);
+    if (myHandSrc === "") {
+      alert("カードを選択してください");
+      setIsDecision(false);
+      return;
+    }
+    setIsDecision(true);
   };
   const rockCardClick = () => {
-    console.log("ボタンがクリックされました");
+    if (isDecision) return;
     setMyHandSrc("/images/rock.png");
     setMyTitle("グー");
   };
   const scissorsCardClick = () => {
-    console.log("ボタンがクリックされました");
+    if (isDecision) return;
     setMyHandSrc("/images/scissors.png");
     setMyTitle("チョキ");
   };
   const paperCardClick = () => {
-    console.log("ボタンがクリックされました");
+    if (isDecision) return;
     setMyHandSrc("/images/paper.png");
     setMyTitle("パー");
   };
@@ -67,7 +74,7 @@ const Play = () => {
         />
         <div>持っているカード4</div>
       </div>
-      <MiniButton text="決定" handleClick={handleClick} />
+      <MiniButton text="決定" handleClick={decisionClick} />
     </div>
   );
 };
