@@ -1,5 +1,6 @@
 import Image from "next/image";
 import classNames from "classnames";
+import ReverseSide from "../reverseSide/reverseSide";
 
 interface CardProps {
   imageSrc: string;
@@ -9,6 +10,8 @@ interface CardProps {
 }
 
 const Card: React.FC<CardProps> = ({ imageSrc, title, className, onClick }) => {
+  if (imageSrc === "")
+    return <ReverseSide imageSrc="/images/reverseCard.png" />;
   return (
     <div
       className={classNames(

@@ -1,19 +1,43 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Timer from "../components/elements/timer/timer";
 import Card from "../components/elements/card/card";
 import HaveCard from "../components/elements/card/haveCard";
 import MiniButton from "../components/elements/button/miniButton";
 import FlipCard from "../components/elements/card/flipCard";
 import ReverseSide from "../components/elements/reverseSide/reverseSide";
+import SearchSrc from "../components/features/Play/SearchSrc";
+import io from "socket.io-client";
+
+const socket = io("http://localhost:4000"); //ここにはサーバーのURLが入る
+
+interface GameResult {
+  gameResult: string;
+  myTitle: string;
+  enemyTitle: string;
+}
 
 const Play = () => {
   const [myHandSrc, setMyHandSrc] = useState("");
   const [myTitle, setMyTitle] = useState("");
+  const [gameResult, setGameResult] = useState(""); // 結果を使ったら空の文字列にする
+  const [enemyHandSrc, setEnemyHandSrc] = useState(""); // 結果を使ったら空の文字列にする
+  const [enemyTitle, setEnemyTitle] = useState(""); // 結果を使ったら空の文字列にする
   const [isDecision, setIsDecision] = useState(false);
-  const enemyHand = "/images/paper.png";
-  const enemyTitle = "パー";
+
+  useEffect(() => {
+    // サーバーからのゲーム結果を受け取る
+    socket.on("gameResult", (result: GameResult) => {
+      setGameResult(result.gameResult); // ゲームの結果メッセージ
+      setEnemyTitle(result.enemyTitle); // （敵の手に対応するタイトルなど）
+      setEnemyHandSrc(SearchSrc(result.enemyTitle)); // 対応した関数を制作し呼び出す
+    });
+
+    return () => {
+      socket.off("gameResult");
+    };
+  }, []);
 
   const decisionClick = () => {
     console.log(myHandSrc);
@@ -23,6 +47,9 @@ const Play = () => {
       return;
     }
     setIsDecision(true);
+
+    // バックエンドに出した手のデータを送る
+    socket.emit("playerChoice", { player: "Player 1", myTitle });
   };
   const rockCardClick = () => {
     if (isDecision) return;
@@ -51,7 +78,7 @@ const Play = () => {
           <ReverseSide imageSrc="/images/reverseCard.png" />
         )}
         {/* 相手のカード */}
-        <FlipCard imageSrc={enemyHand} title={enemyTitle} />
+        <FlipCard imageSrc={enemyHandSrc} title={enemyTitle} />
       </div>
       <div className="flex flex-row">
         <HaveCard
@@ -75,6 +102,7 @@ const Play = () => {
         <div>持っているカード4</div>
       </div>
       <MiniButton text="決定" handleClick={decisionClick} />
+      <div>{gameResult}</div>
     </div>
   );
 };

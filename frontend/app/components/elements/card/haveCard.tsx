@@ -1,4 +1,5 @@
 import Card from "./card";
+import ReverseSide from "../reverseSide/reverseSide";
 
 interface CardProps {
   imageSrc: string;
@@ -13,6 +14,8 @@ const HaveCard: React.FC<CardProps> = ({
   haveItem,
   onClick,
 }) => {
+  if (imageSrc === "")
+    return <ReverseSide imageSrc="/images/reverseCard.png" />;
   return (
     <div>
       <p className="flex justify-center text-3xl">x{haveItem}</p>

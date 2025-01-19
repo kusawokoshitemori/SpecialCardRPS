@@ -19,6 +19,8 @@ const FlipCard = ({ imageSrc, title }: FlipProps) => {
     console.log("裏返しました");
   };
 
+  if (imageSrc === "")
+    return <ReverseSide imageSrc="/images/reverseCard.png" />;
   return (
     <div className="relative w-32 h-48 perspective-1000">
       {/* 3D回転を持つカード */}
