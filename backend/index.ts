@@ -27,8 +27,19 @@ io.on("connection", (socket) => {
       const player1 = waitingPlayers.shift();
       const player2 = waitingPlayers.shift();
 
-      player1.socket.emit("match_found", { opponent: player2.username });
-      player2.socket.emit("match_found", { opponent: player1.username });
+      // 被らないroomの名前
+      const roomName = `room-${player1.socket.id}-${player2.socket.id}`;
+
+      // roomに参加させる
+      player1.socket.join(roomName);
+      player2.socket.join(roomName);
+
+      io.to(roomName).emit("match_found", {
+        message: "マッチング成立！ゲームを開始します。",
+        players: [player1.username, player2.username],
+      });
+
+      console.log(`ルーム作成: ${roomName}`);
       console.log(`マッチング成立: ${player1.username} vs ${player2.username}`);
     }
   });
