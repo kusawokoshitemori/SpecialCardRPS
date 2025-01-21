@@ -1,6 +1,7 @@
 // app/layout.tsx
 import "../app/globals.css";
 import { RoomProvider } from "./components/context/roomContext";
+import { SocketProvider } from "./components/context/socketContext";
 
 export const metadata = {
   title: "特殊カードジャンケン",
@@ -15,7 +16,9 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <body>
-        <RoomProvider>{children}</RoomProvider>
+        <SocketProvider>
+          <RoomProvider>{children}</RoomProvider>
+        </SocketProvider>
       </body>
     </html>
   );

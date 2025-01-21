@@ -6,17 +6,22 @@ import { io, Socket } from "socket.io-client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useRoomContext } from "../components/context/roomContext";
+import { useSocketContext } from "../components/context/socketContext";
 
 let socket: Socket;
 
 const Online = () => {
   const [isMatched, setIsMatched] = useState(false);
   const { roomId, setRoomId } = useRoomContext();
+  const { socketId, setSocketId } = useSocketContext();
   const router = useRouter();
 
   const handleMatchStart = () => {
     if (!socket) {
-      socket = io("http://localhost:4000");
+      socket = io("http://localhost:4000", {
+        autoConnect: true,
+        reconnection: true,
+      });
       socket.on("match_found", (data) => {
         setIsMatched(true);
         console.log("マッチング成功");
@@ -25,7 +30,8 @@ const Online = () => {
         console.log(`対戦相手は: ${data.players}です`); // 配列が表示される
         console.log(`ルーム名: ${data.roomName}`);
         setRoomId(data.roomName);
-        console.log(roomId);
+        if (socket.id) setSocketId(socket.id);
+        console.log(roomId, socketId);
       });
     }
     socket.emit("start_matching", { username: "プレイヤー１" });

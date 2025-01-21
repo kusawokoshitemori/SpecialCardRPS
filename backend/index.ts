@@ -13,6 +13,20 @@ const io = new Server(server, {
 const PORT = 4000;
 
 const waitingPlayers = [];
+const gameRooms = {}; // ルームごとの情報を管理
+
+// 勝敗判定関数
+const determineWinner = (choice1, choice2) => {
+  if (choice1 === choice2) return "draw";
+  if (
+    (choice1 === "グー" && choice2 === "チョキ") ||
+    (choice1 === "チョキ" && choice2 === "パー") ||
+    (choice1 === "パー" && choice2 === "グー")
+  ) {
+    return "player1";
+  }
+  return "player2";
+};
 
 // クライアントと接続
 io.on("connection", (socket) => {
@@ -34,6 +48,24 @@ io.on("connection", (socket) => {
       player1.socket.join(roomName);
       player2.socket.join(roomName);
 
+      // ルーム情報を登録
+      gameRooms[roomName] = {
+        players: [
+          {
+            id: player1.socket.id,
+            username: player1.username,
+            choice: null,
+            points: 0,
+          },
+          {
+            id: player2.socket.id,
+            username: player2.username,
+            choice: null,
+            points: 0,
+          },
+        ],
+      };
+
       io.to(roomName).emit("match_found", {
         message: "マッチング成立！ゲームを開始します。",
         players: [player1.username, player2.username],
@@ -42,6 +74,60 @@ io.on("connection", (socket) => {
 
       console.log(`ルーム作成: ${roomName}`);
       console.log(`マッチング成立: ${player1.username} vs ${player2.username}`);
+    }
+  });
+
+  // プレイヤーの選択を受け取る
+  socket.on("player_choice", (data) => {
+    const { roomName, playerId, choice } = data;
+    console.log("受信したデータ:", data);
+
+    if (!gameRooms[roomName]) {
+      console.log("無効なルーム名");
+      return;
+    }
+
+    const room = gameRooms[roomName];
+    const player = room.players.find((p) => p.id === playerId);
+
+    if (!player) {
+      console.log("プレイヤーが見つかりません");
+      return;
+    }
+
+    player.choice = choice;
+    console.log(`${player.username} が ${choice} を選択しました`);
+
+    // 両プレイヤーの選択が揃ったら勝敗を判定
+    if (room.players.every((p) => p.choice)) {
+      const [player1, player2] = room.players;
+      const result = determineWinner(player1.choice, player2.choice);
+
+      if (result === "player1") {
+        player1.points += 1;
+      } else if (result === "player2") {
+        player2.points += 1;
+      }
+
+      io.to(roomName).emit("round_result", {
+        players: room.players,
+        result,
+      });
+
+      // 次のラウンドの準備
+      room.players.forEach((p) => (p.choice = null));
+
+      // 試合終了条件をチェック
+      if (player1.points >= 3 || player2.points >= 3) {
+        const winner = player1.points >= 3 ? player1 : player2;
+        io.to(roomName).emit("game_end", {
+          message: `試合終了！${winner.username} の勝利！`,
+          players: room.players,
+        });
+
+        // ルームを削除
+        delete gameRooms[roomName];
+      }
     }
   });
 

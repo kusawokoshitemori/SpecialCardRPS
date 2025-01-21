@@ -1,3 +1,5 @@
+"use client";
+
 // context/RoomContext.tsx
 import { createContext, useContext, useState, ReactNode } from "react";
 
