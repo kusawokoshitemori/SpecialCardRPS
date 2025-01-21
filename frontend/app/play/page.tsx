@@ -8,6 +8,7 @@ import MiniButton from "../components/elements/button/miniButton";
 import FlipCard from "../components/elements/card/flipCard";
 import ReverseSide from "../components/elements/reverseSide/reverseSide";
 import SearchSrc from "../components/features/Play/SearchSrc";
+import { useRoomContext } from "../components/context/roomContext";
 import io from "socket.io-client";
 
 const socket = io("http://localhost:4000"); //ここにはサーバーのURLが入る
@@ -25,6 +26,7 @@ const Play = () => {
   const [enemyHandSrc, setEnemyHandSrc] = useState(""); // 結果を使ったら空の文字列にする
   const [enemyTitle, setEnemyTitle] = useState(""); // 結果を使ったら空の文字列にする
   const [isDecision, setIsDecision] = useState(false);
+  const { roomId } = useRoomContext(); // ContextからroomIdを取り出す
 
   useEffect(() => {
     // サーバーからのゲーム結果を受け取る
@@ -49,7 +51,7 @@ const Play = () => {
     setIsDecision(true);
 
     // バックエンドに出した手のデータを送る
-    socket.emit("playerChoice", { player: "Player 1", myTitle });
+    socket.emit("choose_hand", { player: "Player 1", myTitle });
   };
   const rockCardClick = () => {
     if (isDecision) return;

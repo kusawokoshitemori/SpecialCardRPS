@@ -1,8 +1,10 @@
 // app/layout.tsx
 import "../app/globals.css";
+import { RoomProvider } from "./components/context/roomContext";
+
 export const metadata = {
-  title: "My App",
-  description: "A description of my app",
+  title: "特殊カードジャンケン",
+  description: "心理戦2人用対戦ゲーム",
 };
 
 export default function RootLayout({
@@ -11,8 +13,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body>{children}</body>
+    <html lang="ja">
+      <body>
+        <RoomProvider>{children}</RoomProvider>
+      </body>
     </html>
   );
 }

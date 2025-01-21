@@ -37,6 +37,7 @@ io.on("connection", (socket) => {
       io.to(roomName).emit("match_found", {
         message: "マッチング成立！ゲームを開始します。",
         players: [player1.username, player2.username],
+        roomName,
       });
 
       console.log(`ルーム作成: ${roomName}`);

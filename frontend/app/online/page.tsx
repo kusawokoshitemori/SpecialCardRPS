@@ -5,20 +5,27 @@ import Button from "../components/elements/button/Button";
 import { io, Socket } from "socket.io-client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useRoomContext } from "../components/context/roomContext";
 
 let socket: Socket;
 
 const Online = () => {
   const [isMatched, setIsMatched] = useState(false);
+  const { roomId, setRoomId } = useRoomContext();
   const router = useRouter();
 
   const handleMatchStart = () => {
     if (!socket) {
       socket = io("http://localhost:4000");
-      socket.on("match_found", (opponent) => {
+      socket.on("match_found", (data) => {
         setIsMatched(true);
         console.log("マッチング成功");
-        console.log(`対戦相手は${opponent}です`); //対戦相手は[object Object]です って出ちゃうから適切なデータの型にした後json型で使用
+
+        console.log(`メッセージ: ${data.message}`);
+        console.log(`対戦相手は: ${data.players}です`); // 配列が表示される
+        console.log(`ルーム名: ${data.roomName}`);
+        setRoomId(data.roomName);
+        console.log(roomId);
       });
     }
     socket.emit("start_matching", { username: "プレイヤー１" });
