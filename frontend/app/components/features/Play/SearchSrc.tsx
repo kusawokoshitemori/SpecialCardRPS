@@ -6,7 +6,7 @@ const SearchSrc = (handTitle: string) => {
     ["パー", "/images/paper.png"],
     ["ミラー", "/images/mirror.png"],
     ["全知全能", "/images/knowledge.png"],
-    ["無限の手", "/images/threepaper"],
+    ["無限の手", "/images/threepaper.png"],
     ["リバース", "/images/reverse.png"],
     ["封印", "/images/ban.png"],
   ]);

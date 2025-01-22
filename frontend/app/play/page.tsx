@@ -8,6 +8,7 @@ import MiniButton from "../components/elements/button/miniButton";
 import FlipCard from "../components/elements/card/flipCard";
 import ReverseSide from "../components/elements/reverseSide/reverseSide";
 import SearchSrc from "../components/features/Play/SearchSrc";
+import randomSpecialTitle from "../components/features/Play/specialTitle";
 import { useRoomContext } from "../components/context/roomContext";
 import { useSocketContext } from "../components/context/socketContext";
 import io from "socket.io-client";
@@ -25,6 +26,11 @@ const Play = () => {
   const [isFlipped, setIsFlipped] = useState(true); // trueなら裏面、falseなら表面
   const { roomId } = useRoomContext(); // ContextからroomIdを取り出す
   const { socketId } = useSocketContext();
+  const [specialTitle, setSpecialTitle] = useState("ミラー");
+
+  useEffect(() => {
+    setSpecialTitle(randomSpecialTitle());
+  }, []);
 
   useEffect(() => {
     if (roomId) {
@@ -107,6 +113,11 @@ const Play = () => {
     setMyHandSrc("/images/paper.png");
     setMyTitle("パー");
   };
+  const specialCardClick = () => {
+    if (isDecision) return;
+    setMyHandSrc(SearchSrc(specialTitle));
+    setMyTitle(specialTitle);
+  };
 
   return (
     <div className="flex items-center justify-center flex-col">
@@ -144,7 +155,12 @@ const Play = () => {
           haveItem={2}
           onClick={paperCardClick}
         />
-        <div>持っているカード4</div>
+        <HaveCard
+          imageSrc={SearchSrc(specialTitle)}
+          title={specialTitle}
+          haveItem={1}
+          onClick={specialCardClick}
+        />
       </div>
       <MiniButton text="決定" handleClick={decisionClick} />
       <div>結果 : {gameResult}</div>
