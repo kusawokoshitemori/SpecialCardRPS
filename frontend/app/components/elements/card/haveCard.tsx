@@ -19,7 +19,11 @@ const HaveCard: React.FC<CardProps> = ({
   return (
     <div>
       <p className="flex justify-center text-3xl">x{haveItem}</p>
-      <Card imageSrc={imageSrc} title={title} onClick={onClick} />
+      <Card
+        imageSrc={imageSrc}
+        title={title}
+        onClick={haveItem > 0 ? onClick : undefined}
+      />
     </div>
   );
 };

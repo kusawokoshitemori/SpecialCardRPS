@@ -27,6 +27,12 @@ const Play = () => {
   const { roomId } = useRoomContext(); // ContextからroomIdを取り出す
   const { socketId } = useSocketContext();
   const [specialTitle, setSpecialTitle] = useState("ミラー");
+  const [items, setItems] = useState({
+    グー: 2,
+    チョキ: 2,
+    パー: 2,
+    special: 1,
+  });
 
   useEffect(() => {
     setSpecialTitle(randomSpecialTitle());
@@ -69,6 +75,19 @@ const Play = () => {
       return;
     }
     setIsDecision(true);
+    // グー、チョキ、パー以外はspecialとして扱う配列
+    const adjustTitle = (title: string) => {
+      if (title === "グー") return "グー";
+      else if (title === "チョキ") return "チョキ";
+      else if (title === "パー") return "パー";
+      else return "special";
+    };
+
+    // myTitleが「グー」や「チョキ」や「パー」の場合、そのまま、それ以外は「special」として扱う
+    setItems((prevItems) => ({
+      ...prevItems, // 他のキーを維持
+      [adjustTitle(myTitle)]: Math.max(0, prevItems[adjustTitle(myTitle)] - 1), // 動的にキーを決めて値を減らす
+    }));
 
     // バックエンドに出した手のデータを送る
     socket.emit("player_choice", {
@@ -140,25 +159,25 @@ const Play = () => {
         <HaveCard
           imageSrc="/images/rock.png"
           title="グー"
-          haveItem={2}
+          haveItem={items["グー"]}
           onClick={rockCardClick}
         />
         <HaveCard
           imageSrc="/images/scissors.png"
           title="チョキ"
-          haveItem={2}
+          haveItem={items["チョキ"]}
           onClick={scissorsCardClick}
         />
         <HaveCard
           imageSrc="/images/paper.png"
           title="パー"
-          haveItem={2}
+          haveItem={items["パー"]}
           onClick={paperCardClick}
         />
         <HaveCard
           imageSrc={SearchSrc(specialTitle)}
           title={specialTitle}
-          haveItem={1}
+          haveItem={items["special"]}
           onClick={specialCardClick}
         />
       </div>
