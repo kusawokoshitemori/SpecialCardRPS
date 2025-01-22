@@ -14,12 +14,6 @@ import io from "socket.io-client";
 
 const socket = io("http://localhost:4000"); //ここにはサーバーのURLが入る
 
-interface GameResult {
-  gameResult: string;
-  myTitle: string;
-  enemyTitle: string;
-}
-
 const Play = () => {
   const [myHandSrc, setMyHandSrc] = useState("");
   const [myTitle, setMyTitle] = useState("");
@@ -31,15 +25,24 @@ const Play = () => {
   const { socketId } = useSocketContext();
 
   useEffect(() => {
-    // サーバーからのゲーム結果を受け取る
-    socket.on("gameResult", (result: GameResult) => {
-      setGameResult(result.gameResult); // ゲームの結果メッセージ
-      setEnemyTitle(result.enemyTitle); // （敵の手に対応するタイトルなど）
-      setEnemyHandSrc(SearchSrc(result.enemyTitle)); // 対応した関数を制作し呼び出す
+    if (roomId) {
+      socket.emit("reEnter", { roomId });
+      console.log(`再参加リクエスト送信: roomId = ${roomId}`);
+    }
+  }, [roomId]);
+
+  useEffect(() => {
+    // サーバーからの "round_result" イベントをリッスン
+    socket.on("round_result", (data) => {
+      setGameResult(data.result);
+      setEnemyTitle(data.enemyTitle);
+      setEnemyHandSrc(SearchSrc(data.enemyTitle));
+      console.log("round_result通った");
     });
 
+    // クリーンアップ
     return () => {
-      socket.off("gameResult");
+      socket.off("round_result");
     };
   }, []);
 
@@ -62,6 +65,10 @@ const Play = () => {
       `roomId: ${roomId}, socket.id: ${socketId}, choice: ${myTitle}`
     );
   };
+  const handleTest = () => {
+    console.log(`gameResult : ${gameResult}`);
+  };
+
   const rockCardClick = () => {
     if (isDecision) return;
     setMyHandSrc("/images/rock.png");
@@ -113,7 +120,9 @@ const Play = () => {
         <div>持っているカード4</div>
       </div>
       <MiniButton text="決定" handleClick={decisionClick} />
-      <div>{gameResult}</div>
+      <div>結果 : {gameResult}</div>
+      <div>相手の手 : {enemyTitle}</div>
+      <MiniButton text="text用" handleClick={handleTest} />
     </div>
   );
 };

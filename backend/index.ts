@@ -77,6 +77,15 @@ io.on("connection", (socket) => {
     }
   });
 
+  socket.on("reEnter", ({ roomId }) => {
+    if (roomId) {
+      socket.join(roomId);
+      console.log(`Client ${socket.id} rejoined room: ${roomId}`);
+    } else {
+      console.error("Room ID is undefined or missing");
+    }
+  });
+
   // プレイヤーの選択を受け取る
   socket.on("player_choice", (data) => {
     const { roomName, playerId, choice } = data;
@@ -100,6 +109,7 @@ io.on("connection", (socket) => {
 
     // 両プレイヤーの選択が揃ったら勝敗を判定
     if (room.players.every((p) => p.choice)) {
+      console.log("勝利判定をします");
       const [player1, player2] = room.players;
       const result = determineWinner(player1.choice, player2.choice);
 
@@ -110,9 +120,10 @@ io.on("connection", (socket) => {
       }
 
       io.to(roomName).emit("round_result", {
-        players: room.players,
         result,
+        enemyTitle: player2.choice, // これだと恐らく2Pの手だけ出る(1Pを出す->出した手と同じなら2Pの手って感じで)
       });
+      console.log(`round_result通った ${result},${player2.choice}`);
 
       // 次のラウンドの準備
       room.players.forEach((p) => (p.choice = null));
