@@ -9,6 +9,7 @@ import FlipCard from "../components/elements/card/flipCard";
 import ReverseSide from "../components/elements/reverseSide/reverseSide";
 import SearchSrc from "../components/features/Play/SearchSrc";
 import randomSpecialTitle from "../components/features/Play/specialTitle";
+import ScoreCount from "../components/features/Play/scoreCount";
 import { useRoomContext } from "../components/context/roomContext";
 import { useSocketContext } from "../components/context/socketContext";
 import io from "socket.io-client";
@@ -33,6 +34,8 @@ const Play = () => {
     パー: 2,
     special: 1,
   });
+  const [myScore, setMyScore] = useState<number>(0);
+  const [enemyScore, setEnemyScore] = useState<number>(0);
 
   useEffect(() => {
     setSpecialTitle(randomSpecialTitle());
@@ -75,6 +78,7 @@ const Play = () => {
       return;
     }
     setIsDecision(true);
+
     // グー、チョキ、パー以外はspecialとして扱う配列
     const adjustTitle = (title: string) => {
       if (title === "グー") return "グー";
@@ -104,6 +108,8 @@ const Play = () => {
     setTimeout(() => {
       setShowBattleText(false); // 2秒後に非表示
       setIsFlipped(false); // その後にフリップアクション
+      ScoreCount({ myTitle, enemyTitle, setMyScore, setEnemyScore });
+      console.log(`ScoreCount通った ${myScore},${enemyScore}`);
       // 5秒後に全リセット
       setTimeout(() => {
         setMyHandSrc("");
@@ -184,6 +190,9 @@ const Play = () => {
       <MiniButton text="決定" handleClick={decisionClick} />
       <div>結果 : {gameResult}</div>
       <div>相手の手 : {enemyTitle}</div>
+      <div>
+        今の点数: あなた: {myScore}, 相手: {enemyScore}
+      </div>
       <MiniButton text="text用" handleClick={handleDisplayResult} />
       {showBattleText && (
         <div className="absolute inset-0 flex items-center justify-center bg-transparent z-50">

@@ -34,6 +34,7 @@ const determineWinner = (choice1, choice2) => {
     }
   }
   if (choice1 === "全知全能") return "draw";
+  if (choice1 === "リバース" || choice2 === "リバース") return "draw";
   if (choice1 === "無限パー") {
     if (choice2 === "グー") return "player1player1"; // 2ポイント
     else if (choice2 === "チョキ") return "player2";
