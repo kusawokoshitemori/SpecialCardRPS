@@ -79,6 +79,16 @@ const Play = () => {
     setTimeout(() => {
       setShowBattleText(false); // 2秒後に非表示
       setIsFlipped(false); // その後にフリップアクション
+      // 5秒後に全リセット
+      setTimeout(() => {
+        setMyHandSrc("");
+        setMyTitle("");
+        setGameResult("");
+        setEnemyHandSrc("");
+        setEnemyTitle("");
+        setIsDecision(false);
+        setIsFlipped(true);
+      }, 5000);
     }, 2000); // 2秒後に処理
   };
 
