@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Timer from "../components/elements/timer/timer";
 import Card from "../components/elements/card/card";
 import HaveCard from "../components/elements/card/haveCard";
@@ -48,6 +48,41 @@ const Play = () => {
     }
   }, [roomId]);
 
+  const handleDisplayResult = useCallback(() => {
+    setShowBattleText(true); // 勝負表示開始
+    setTimeout(() => {
+      setShowBattleText(false); // 2秒後に非表示
+      setIsFlipped(false); // その後にフリップアクション
+      ScoreCount({ myTitle, enemyTitle, setMyScore, setEnemyScore });
+      console.log(`ScoreCount通った ${myScore},${enemyScore}`);
+      // 5秒後に全リセット
+      setTimeout(() => {
+        setMyHandSrc("");
+        setMyTitle("");
+        setGameResult("");
+        setEnemyHandSrc("");
+        setEnemyTitle("");
+        setIsDecision(false);
+        setIsFlipped(true);
+      }, 5000);
+    }, 2000); // 2秒後に処理
+  }, [
+    myTitle,
+    enemyTitle,
+    setMyScore,
+    setEnemyScore,
+    setShowBattleText,
+    setIsFlipped,
+    setMyHandSrc,
+    setMyTitle,
+    setGameResult,
+    setEnemyHandSrc,
+    setEnemyTitle,
+    setIsDecision,
+    myScore,
+    enemyScore,
+  ]);
+
   useEffect(() => {
     // サーバーからの "round_result" イベントをリッスン
     socket.on("round_result", (data) => {
@@ -59,6 +94,7 @@ const Play = () => {
         setEnemyHandSrc(SearchSrc(data.enemyTitle1));
       }
       setGameResult(data.result);
+      handleDisplayResult();
 
       console.log("round_result通った");
       console.log(`myTitle: ${myTitle}, data.enemyTitle1: ${data.enemyTitle1}`);
@@ -68,10 +104,14 @@ const Play = () => {
     return () => {
       socket.off("round_result");
     };
-  }, [myTitle]);
+  }, [myTitle, handleDisplayResult]);
 
   const decisionClick = () => {
     console.log(myHandSrc);
+    if (isDecision) {
+      alert("カードは既に選択されています");
+      return;
+    }
     if (myHandSrc === "") {
       alert("カードを選択してください");
       setIsDecision(false);
@@ -102,25 +142,6 @@ const Play = () => {
     console.log(
       `roomId: ${roomId}, socket.id: ${socketId}, choice: ${myTitle}`
     );
-  };
-  const handleDisplayResult = () => {
-    setShowBattleText(true); // 勝負表示開始
-    setTimeout(() => {
-      setShowBattleText(false); // 2秒後に非表示
-      setIsFlipped(false); // その後にフリップアクション
-      ScoreCount({ myTitle, enemyTitle, setMyScore, setEnemyScore });
-      console.log(`ScoreCount通った ${myScore},${enemyScore}`);
-      // 5秒後に全リセット
-      setTimeout(() => {
-        setMyHandSrc("");
-        setMyTitle("");
-        setGameResult("");
-        setEnemyHandSrc("");
-        setEnemyTitle("");
-        setIsDecision(false);
-        setIsFlipped(true);
-      }, 5000);
-    }, 2000); // 2秒後に処理
   };
 
   const rockCardClick = () => {
@@ -193,7 +214,6 @@ const Play = () => {
       <div>
         今の点数: あなた: {myScore}, 相手: {enemyScore}
       </div>
-      <MiniButton text="text用" handleClick={handleDisplayResult} />
       {showBattleText && (
         <div className="absolute inset-0 flex items-center justify-center bg-transparent z-50">
           <p className="text-9xl font-bold text-red-500 animate-pulse">勝負</p>
