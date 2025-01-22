@@ -21,6 +21,8 @@ const Play = () => {
   const [enemyHandSrc, setEnemyHandSrc] = useState(""); // 結果を使ったら空の文字列にする
   const [enemyTitle, setEnemyTitle] = useState(""); // 結果を使ったら空の文字列にする
   const [isDecision, setIsDecision] = useState(false);
+  const [showBattleText, setShowBattleText] = useState(false); // 「勝負」というテキスト
+  const [isFlipped, setIsFlipped] = useState(true); // trueなら裏面、falseなら表面
   const { roomId } = useRoomContext(); // ContextからroomIdを取り出す
   const { socketId } = useSocketContext();
 
@@ -72,8 +74,12 @@ const Play = () => {
       `roomId: ${roomId}, socket.id: ${socketId}, choice: ${myTitle}`
     );
   };
-  const handleTest = () => {
-    console.log(`今のsocket.id : ${socketId}`);
+  const handleDisplayResult = () => {
+    setShowBattleText(true); // 勝負表示開始
+    setTimeout(() => {
+      setShowBattleText(false); // 2秒後に非表示
+      setIsFlipped(false); // その後にフリップアクション
+    }, 2000); // 2秒後に処理
   };
 
   const rockCardClick = () => {
@@ -103,7 +109,11 @@ const Play = () => {
           <ReverseSide imageSrc="/images/reverseCard.png" />
         )}
         {/* 相手のカード */}
-        <FlipCard imageSrc={enemyHandSrc} title={enemyTitle} />
+        <FlipCard
+          imageSrc={enemyHandSrc}
+          title={enemyTitle}
+          isFlipped={isFlipped}
+        />
       </div>
       <div className="flex flex-row">
         <HaveCard
@@ -129,7 +139,12 @@ const Play = () => {
       <MiniButton text="決定" handleClick={decisionClick} />
       <div>結果 : {gameResult}</div>
       <div>相手の手 : {enemyTitle}</div>
-      <MiniButton text="text用" handleClick={handleTest} />
+      <MiniButton text="text用" handleClick={handleDisplayResult} />
+      {showBattleText && (
+        <div className="absolute inset-0 flex items-center justify-center bg-transparent z-50">
+          <p className="text-9xl font-bold text-red-500 animate-pulse">勝負</p>
+        </div>
+      )}
     </div>
   );
 };
