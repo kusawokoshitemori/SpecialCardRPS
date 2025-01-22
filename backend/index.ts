@@ -121,9 +121,9 @@ io.on("connection", (socket) => {
 
       io.to(roomName).emit("round_result", {
         result,
-        enemyTitle: player2.choice, // これだと恐らく2Pの手だけ出る(1Pを出す->出した手と同じなら2Pの手って感じで)
+        enemyTitle1: player1.choice,
+        enemyTitle2: player2.choice,
       });
-      console.log(`round_result通った ${result},${player2.choice}`);
 
       // 次のラウンドの準備
       room.players.forEach((p) => (p.choice = null));

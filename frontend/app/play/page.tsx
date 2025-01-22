@@ -34,17 +34,24 @@ const Play = () => {
   useEffect(() => {
     // サーバーからの "round_result" イベントをリッスン
     socket.on("round_result", (data) => {
+      if (myTitle === data.enemyTitle1) {
+        setEnemyTitle(data.enemyTitle2);
+        setEnemyHandSrc(SearchSrc(data.enemyTitle2));
+      } else {
+        setEnemyTitle(data.enemyTitle1);
+        setEnemyHandSrc(SearchSrc(data.enemyTitle1));
+      }
       setGameResult(data.result);
-      setEnemyTitle(data.enemyTitle);
-      setEnemyHandSrc(SearchSrc(data.enemyTitle));
+
       console.log("round_result通った");
+      console.log(`myTitle: ${myTitle}, data.enemyTitle1: ${data.enemyTitle1}`);
     });
 
     // クリーンアップ
     return () => {
       socket.off("round_result");
     };
-  }, []);
+  }, [myTitle]);
 
   const decisionClick = () => {
     console.log(myHandSrc);
@@ -66,7 +73,7 @@ const Play = () => {
     );
   };
   const handleTest = () => {
-    console.log(`gameResult : ${gameResult}`);
+    console.log(`今のsocket.id : ${socketId}`);
   };
 
   const rockCardClick = () => {
