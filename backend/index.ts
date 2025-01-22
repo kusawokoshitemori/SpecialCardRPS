@@ -18,6 +18,39 @@ const gameRooms = {}; // ルームごとの情報を管理
 // 勝敗判定関数
 const determineWinner = (choice1, choice2) => {
   if (choice1 === choice2) return "draw";
+  if (choice1 === "封印" || choice2 === "封印") return "draw";
+  if (choice1 === "ミラー") {
+    if (choice2 === "グー" || choice2 === "チョキ" || choice2 === "パー") {
+      return "player2";
+    } else {
+      return "player1win";
+    }
+  }
+  if (choice2 === "ミラー") {
+    if (choice1 === "グー" || choice1 === "チョキ" || choice1 === "パー") {
+      return "player1";
+    } else {
+      return "player2win";
+    }
+  }
+  if (choice1 === "全知全能") return "draw";
+  if (choice1 === "無限パー") {
+    if (choice2 === "グー") return "player1player1"; // 2ポイント
+    else if (choice2 === "チョキ") return "player2";
+    else return "draw";
+  }
+
+  if (choice2 === "全知全能") return "draw";
+  if (choice2 === "無限パー") {
+    if (choice1 === "グー") {
+      return "player2player2"; // 2ポイント
+    } else if (choice1 === "チョキ") {
+      return "player1";
+    } else {
+      return "draw";
+    }
+  }
+
   if (
     (choice1 === "グー" && choice2 === "チョキ") ||
     (choice1 === "チョキ" && choice2 === "パー") ||
@@ -115,8 +148,24 @@ io.on("connection", (socket) => {
 
       if (result === "player1") {
         player1.points += 1;
+        console.log("player1が1ポイントを獲得しました");
       } else if (result === "player2") {
         player2.points += 1;
+        console.log("player2が1ポイントを獲得しました");
+      } else if (result === "draw") {
+        console.log("引き分けです");
+      } else if (result === "player1player1") {
+        player1.points += 2;
+        console.log("player1が2ポイント獲得しました");
+      } else if (result === "player2player2") {
+        player2.points += 2;
+        console.log("player2が2ポイントを獲得しました");
+      } else if (result === "player1win") {
+        player1.points += 3;
+        console.log("player1が3ポイントを獲得しました");
+      } else if (result === "player2win") {
+        player2.points += 3;
+        console.log("player2が3ポイントを獲得しました");
       }
 
       io.to(roomName).emit("round_result", {
