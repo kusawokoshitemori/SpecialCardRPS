@@ -5,8 +5,8 @@ import Button from "../components/elements/button/Button";
 import { io, Socket } from "socket.io-client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useRoomContext } from "../components/context/roomContext";
-import { useSocketContext } from "../components/context/socketContext";
+import { useRoomContext } from "../components/contexts/roomContext";
+import { useSocketContext } from "../components/contexts/socketContext";
 
 let socket: Socket;
 

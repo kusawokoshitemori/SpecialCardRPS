@@ -10,8 +10,8 @@ import ReverseSide from "../components/elements/reverseSide/reverseSide";
 import SearchSrc from "../components/features/Play/SearchSrc";
 import randomSpecialTitle from "../components/features/Play/specialTitle";
 import ScoreCount from "../components/features/Play/scoreCount";
-import { useRoomContext } from "../components/context/roomContext";
-import { useSocketContext } from "../components/context/socketContext";
+import { useRoomContext } from "../components/contexts/roomContext";
+import { useSocketContext } from "../components/contexts/socketContext";
 import io from "socket.io-client";
 
 const socket = io("http://localhost:4000"); //ここにはサーバーのURLが入る
