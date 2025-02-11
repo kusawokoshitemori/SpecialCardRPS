@@ -111,15 +111,6 @@ io.on("connection", (socket) => {
     }
   });
 
-  socket.on("reEnter", ({ roomId }) => {
-    if (roomId) {
-      socket.join(roomId);
-      console.log(`Client ${socket.id} rejoined room: ${roomId}`);
-    } else {
-      console.error("Room ID is undefined or missing");
-    }
-  });
-
   // プレイヤーの選択を受け取る
   socket.on("player_choice", (data) => {
     const { roomName, playerId, choice } = data;

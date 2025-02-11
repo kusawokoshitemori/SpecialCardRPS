@@ -52,6 +52,13 @@ export const SocketProvider2 = ({
     };
   }, []);
 
+  // テスト
+  useEffect(() => {
+    if (socket) {
+      console.log("Socket インスタンス:", socket);
+    }
+  }, [socket]);
+
   const handleMatchStart = () => {
     if (socket) {
       socket.emit("start_matching", { username: "プレイヤー１" });

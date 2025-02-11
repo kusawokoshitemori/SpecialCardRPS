@@ -10,13 +10,14 @@ import ReverseSide from "../components/elements/reverseSide/reverseSide";
 import SearchSrc from "../components/features/Play/SearchSrc";
 import randomSpecialTitle from "../components/features/Play/specialTitle";
 import ScoreCount from "../components/features/Play/scoreCount";
-import { useRoomContext } from "../components/contexts/roomContext";
-import { useSocketContext } from "../components/contexts/socketContext";
-import io from "socket.io-client";
+import { useSocket } from "../components/contexts/socketContext2";
+// import io from "socket.io-client";
 
-const socket = io("http://localhost:4000"); //ここにはサーバーのURLが入る
+// const socket = io("http://localhost:4000"); //ここにはサーバーのURLが入る
 
 const Play = () => {
+  const { socket, roomId, socketId } = useSocket(); // useSocketを使用している
+
   const [myHandSrc, setMyHandSrc] = useState("");
   const [myTitle, setMyTitle] = useState("");
   const [gameResult, setGameResult] = useState(""); // 結果を使ったら空の文字列にする
@@ -25,8 +26,6 @@ const Play = () => {
   const [isDecision, setIsDecision] = useState(false);
   const [showBattleText, setShowBattleText] = useState(false); // 「勝負」というテキスト
   const [isFlipped, setIsFlipped] = useState(true); // trueなら裏面、falseなら表面
-  const { roomId } = useRoomContext(); // ContextからroomIdを取り出す
-  const { socketId } = useSocketContext();
   const [specialTitle, setSpecialTitle] = useState("ミラー");
   const [items, setItems] = useState({
     グー: 2,
@@ -37,16 +36,16 @@ const Play = () => {
   const [myScore, setMyScore] = useState<number>(0);
   const [enemyScore, setEnemyScore] = useState<number>(0);
 
+  // テスト
+  useEffect(() => {
+    if (socket) {
+      console.log("Socket インスタンス:", socket);
+    }
+  }, [socket]);
+
   useEffect(() => {
     setSpecialTitle(randomSpecialTitle());
   }, []);
-
-  useEffect(() => {
-    if (roomId) {
-      socket.emit("reEnter", { roomId });
-      console.log(`再参加リクエスト送信: roomId = ${roomId}`);
-    }
-  }, [roomId]);
 
   const handleDisplayResult = useCallback(() => {
     setShowBattleText(true); // 勝負表示開始
@@ -83,28 +82,28 @@ const Play = () => {
     enemyScore,
   ]);
 
-  useEffect(() => {
-    // サーバーからの "round_result" イベントをリッスン
-    socket.on("round_result", (data) => {
-      if (myTitle === data.enemyTitle1) {
-        setEnemyTitle(data.enemyTitle2);
-        setEnemyHandSrc(SearchSrc(data.enemyTitle2));
-      } else {
-        setEnemyTitle(data.enemyTitle1);
-        setEnemyHandSrc(SearchSrc(data.enemyTitle1));
-      }
-      setGameResult(data.result);
-      handleDisplayResult();
+  // useEffect(() => {
+  //   // サーバーからの "round_result" イベントをリッスン
+  //   socket.on("round_result", (data) => {
+  //     if (myTitle === data.enemyTitle1) {
+  //       setEnemyTitle(data.enemyTitle2);
+  //       setEnemyHandSrc(SearchSrc(data.enemyTitle2));
+  //     } else {
+  //       setEnemyTitle(data.enemyTitle1);
+  //       setEnemyHandSrc(SearchSrc(data.enemyTitle1));
+  //     }
+  //     setGameResult(data.result);
+  //     handleDisplayResult();
 
-      console.log("round_result通った");
-      console.log(`myTitle: ${myTitle}, data.enemyTitle1: ${data.enemyTitle1}`);
-    });
+  //     console.log("round_result通った");
+  //     console.log(`myTitle: ${myTitle}, data.enemyTitle1: ${data.enemyTitle1}`);
+  //   });
 
-    // クリーンアップ
-    return () => {
-      socket.off("round_result");
-    };
-  }, [myTitle, handleDisplayResult]);
+  //   // クリーンアップ
+  //   return () => {
+  //     socket.off("round_result");
+  //   };
+  // }, [myTitle, handleDisplayResult]);
 
   const decisionClick = () => {
     console.log(myHandSrc);
@@ -133,12 +132,12 @@ const Play = () => {
       [adjustTitle(myTitle)]: Math.max(0, prevItems[adjustTitle(myTitle)] - 1), // 動的にキーを決めて値を減らす
     }));
 
-    // バックエンドに出した手のデータを送る
-    socket.emit("player_choice", {
-      roomName: roomId, // サーバーから受け取ったルーム名
-      playerId: socketId, // 自分のソケットID
-      choice: myTitle, // 選択した手
-    });
+    // // バックエンドに出した手のデータを送る
+    // socket.emit("player_choice", {
+    //   roomName: roomId, // サーバーから受け取ったルーム名
+    //   playerId: socketId, // 自分のソケットID
+    //   choice: myTitle, // 選択した手
+    // });
     console.log(
       `roomId: ${roomId}, socket.id: ${socketId}, choice: ${myTitle}`
     );
