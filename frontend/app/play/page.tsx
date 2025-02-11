@@ -11,9 +11,6 @@ import SearchSrc from "../components/features/Play/SearchSrc";
 import randomSpecialTitle from "../components/features/Play/specialTitle";
 import ScoreCount from "../components/features/Play/scoreCount";
 import { useSocket } from "../components/contexts/socketContext2";
-// import io from "socket.io-client";
-
-// const socket = io("http://localhost:4000"); //ここにはサーバーのURLが入る
 
 const Play = () => {
   const { socket, roomId, socketId } = useSocket(); // useSocketを使用している
@@ -52,7 +49,7 @@ const Play = () => {
     setTimeout(() => {
       setShowBattleText(false); // 2秒後に非表示
       setIsFlipped(false); // その後にフリップアクション
-      ScoreCount({ myTitle, enemyTitle, setMyScore, setEnemyScore });
+      ScoreCount({ myTitle, enemyTitle, setMyScore, setEnemyScore }); // この関数で点数を管理する
       console.log(`ScoreCount通った ${myScore},${enemyScore}`);
       // 5秒後に全リセット
       setTimeout(() => {
