@@ -94,12 +94,24 @@ const Play = () => {
       console.log("==========================");
 
       // ここではまだ処理しない
+      if (socketId === data.mySocketId) {
+        setEnemyTitle(data.enemyTitle2);
+        setEnemyHandSrc(SearchSrc(data.enemyTitle2));
+        console.log(`相手の手:${data.enemyTitle2}`);
+      } else {
+        setEnemyTitle(data.myTitle);
+        setEnemyHandSrc(SearchSrc(data.myTitle));
+        console.log(`相手の手:${data.myTitle}`);
+        console.log("違うんだけどー");
+      }
+      setGameResult(data.result);
+      handleDisplayResult();
     });
 
     return () => {
       socket.off("round_result");
     };
-  }, []);
+  }, [handleDisplayResult, socket, socketId]);
 
   const decisionClick = () => {
     console.log(myHandSrc);
