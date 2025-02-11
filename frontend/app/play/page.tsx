@@ -17,13 +17,16 @@ const Play = () => {
 
   const [myHandSrc, setMyHandSrc] = useState("");
   const [myTitle, setMyTitle] = useState("");
-  const [gameResult, setGameResult] = useState(""); // 結果を使ったら空の文字列にする
+  const [gameResult, setGameResult] = useState<"win" | "draw" | "lose" | "">(
+    ""
+  ); // 結果を使ったら空の文字列にする
   const [enemyHandSrc, setEnemyHandSrc] = useState(""); // 結果を使ったら空の文字列にする
   const [enemyTitle, setEnemyTitle] = useState(""); // 結果を使ったら空の文字列にする
   const [isDecision, setIsDecision] = useState(false);
   const [showBattleText, setShowBattleText] = useState(false); // 「勝負」というテキスト
   const [isFlipped, setIsFlipped] = useState(true); // trueなら裏面、falseなら表面
   const [specialTitle, setSpecialTitle] = useState("ミラー");
+  const [gameGetPoint, setGameGetPoint] = useState(0);
   const [items, setItems] = useState({
     グー: 2,
     チョキ: 2,
@@ -49,8 +52,8 @@ const Play = () => {
     setTimeout(() => {
       setShowBattleText(false); // 2秒後に非表示
       setIsFlipped(false); // その後にフリップアクション
-      ScoreCount({ myTitle, enemyTitle, setMyScore, setEnemyScore }); // この関数で点数を管理する
-      console.log(`ScoreCount通った ${myScore},${enemyScore}`);
+      ScoreCount({ gameResult, gameGetPoint, setMyScore, setEnemyScore }); // この関数で点数を管理する
+      console.log(`ScoreCount通った ${gameResult},${gameGetPoint}`);
       // 5秒後に全リセット
       setTimeout(() => {
         setMyHandSrc("");
@@ -60,11 +63,10 @@ const Play = () => {
         setEnemyTitle("");
         setIsDecision(false);
         setIsFlipped(true);
+        setGameGetPoint(0);
       }, 5000);
     }, 2000); // 2秒後に処理
   }, [
-    myTitle,
-    enemyTitle,
     setMyScore,
     setEnemyScore,
     setShowBattleText,
@@ -75,8 +77,8 @@ const Play = () => {
     setEnemyHandSrc,
     setEnemyTitle,
     setIsDecision,
-    myScore,
-    enemyScore,
+    gameGetPoint,
+    gameResult,
   ]);
 
   useEffect(() => {
@@ -84,31 +86,51 @@ const Play = () => {
       // 受け取ったデータを確認
       console.log("=== round_result 受信 ===");
       console.log("result:", data.result);
+      console.log("getPoint:", data.getPoint);
       console.log("mySocketId:", data.mySocketId);
       console.log("enemySocketId:", data.enemySocketId);
       console.log("myTitle:", data.myTitle);
       console.log("enemyTitle2:", data.enemyTitle2);
       console.log("==========================");
 
-      // ここではまだ処理しない
       if (socketId === data.mySocketId) {
         setEnemyTitle(data.enemyTitle2);
         setEnemyHandSrc(SearchSrc(data.enemyTitle2));
         console.log(`相手の手:${data.enemyTitle2}`);
+        // ここでsockeIdを用いてgameResultを分かりやすくする
+        if (data.result === "player1") {
+          setGameResult("win");
+          console.log("setGameResult win!!!");
+        } else if (data.result === "player2") {
+          setGameResult("lose");
+          console.log("setGameResult lose");
+        } else {
+          setGameResult("draw");
+          console.log("setGameResult draw");
+        }
       } else {
         setEnemyTitle(data.myTitle);
         setEnemyHandSrc(SearchSrc(data.myTitle));
         console.log(`相手の手:${data.myTitle}`);
         console.log("違うんだけどー");
+        // ここでsockeIdを用いてgameResultを分かりやすくする
+        if (data.result === "player2") setGameResult("win");
+        else if (data.result === "player1") setGameResult("lose");
+        else setGameResult("draw");
       }
-      setGameResult(data.result);
-      handleDisplayResult();
+      setGameGetPoint(data.getPoint);
     });
 
     return () => {
       socket.off("round_result");
     };
-  }, [handleDisplayResult, socket, socketId]);
+  }, [socket, socketId]);
+
+  useEffect(() => {
+    if (gameResult && gameGetPoint) {
+      handleDisplayResult();
+    }
+  }, [gameResult, gameGetPoint]);
 
   const decisionClick = () => {
     console.log(myHandSrc);

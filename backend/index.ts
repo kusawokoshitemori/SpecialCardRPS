@@ -117,8 +117,11 @@ io.on("connection", (socket) => {
         console.log(`player2が${getPoint}獲得しました`);
       }
 
+      // round_resultにgetPointを付け加えて
+
       io.to(roomName).emit("round_result", {
         result,
+        getPoint,
         mySocketId: player1.id,
         enemySocketId: player2.id,
         myTitle: player1.choice,

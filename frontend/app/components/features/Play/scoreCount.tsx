@@ -1,42 +1,27 @@
 import { Dispatch, SetStateAction } from "react";
-import determineWinner from "./determineWinner";
 
 interface ScoreCountProps {
-  myTitle: string;
-  enemyTitle: string;
+  gameResult: "win" | "draw" | "lose" | "";
+  gameGetPoint: number;
   setMyScore: Dispatch<SetStateAction<number>>;
   setEnemyScore: Dispatch<SetStateAction<number>>;
 }
 
 const ScoreCount = ({
-  myTitle,
-  enemyTitle,
+  gameResult,
+  gameGetPoint,
   setMyScore,
   setEnemyScore,
 }: ScoreCountProps) => {
-  const gameResult = determineWinner(myTitle, enemyTitle);
-  if (gameResult === "player1") {
-    setMyScore((prevScore) => prevScore + 1);
-    console.log("player1が1ポイントを獲得しました");
-  } else if (gameResult === "player2") {
-    setEnemyScore((prevScore) => prevScore + 1);
-    console.log("player2が1ポイントを獲得しました");
+  console.log("今から処理を開始します");
+  if (gameResult === "win") {
+    setMyScore((prev) => prev + gameGetPoint);
+  } else if (gameResult === "lose") {
+    setEnemyScore((prev) => prev + gameGetPoint);
   } else if (gameResult === "draw") {
-    console.log("引き分けです");
-  } else if (gameResult === "player1player1") {
-    setMyScore((prevScore) => prevScore + 2);
-    console.log("player1が2ポイント獲得しました");
-  } else if (gameResult === "player2player2") {
-    setEnemyScore((prevScore) => prevScore + 2);
-    console.log("player2が2ポイントを獲得しました");
-  } else if (gameResult === "player1win") {
-    setMyScore((prevScore) => prevScore + 3);
-    console.log("player1が3ポイントを獲得しました");
-  } else if (gameResult === "player2win") {
-    setEnemyScore((prevScore) => prevScore + 3);
-    console.log("player2が3ポイントを獲得しました");
+    console.log(`引き分けです${gameResult}`);
   } else {
-    console.log(`誰もポイントを獲得しませんでした ${gameResult}`);
+    console.log(`処理できませんでした${gameResult}`);
   }
 };
 export default ScoreCount;
