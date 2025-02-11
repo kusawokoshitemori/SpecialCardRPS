@@ -113,7 +113,7 @@ io.on("connection", (socket) => {
 
   // プレイヤーの選択を受け取る
   socket.on("player_choice", (data) => {
-    const { roomName, playerId, choice } = data;
+    const { roomName, socketId, choice } = data;
     console.log("受信したデータ:", data);
 
     if (!gameRooms[roomName]) {
@@ -122,7 +122,7 @@ io.on("connection", (socket) => {
     }
 
     const room = gameRooms[roomName];
-    const player = room.players.find((p) => p.id === playerId);
+    const player = room.players.find((p) => p.id === socketId);
 
     if (!player) {
       console.log("プレイヤーが見つかりません");
@@ -162,7 +162,9 @@ io.on("connection", (socket) => {
 
       io.to(roomName).emit("round_result", {
         result,
-        enemyTitle1: player1.choice,
+        mySocketId: player1.id,
+        enemySocketId: player2.id,
+        myTitle: player1.choice,
         enemyTitle2: player2.choice,
       });
 

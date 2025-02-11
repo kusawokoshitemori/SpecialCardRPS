@@ -82,28 +82,24 @@ const Play = () => {
     enemyScore,
   ]);
 
-  // useEffect(() => {
-  //   // サーバーからの "round_result" イベントをリッスン
-  //   socket.on("round_result", (data) => {
-  //     if (myTitle === data.enemyTitle1) {
-  //       setEnemyTitle(data.enemyTitle2);
-  //       setEnemyHandSrc(SearchSrc(data.enemyTitle2));
-  //     } else {
-  //       setEnemyTitle(data.enemyTitle1);
-  //       setEnemyHandSrc(SearchSrc(data.enemyTitle1));
-  //     }
-  //     setGameResult(data.result);
-  //     handleDisplayResult();
+  useEffect(() => {
+    socket.on("round_result", (data) => {
+      // 受け取ったデータを確認
+      console.log("=== round_result 受信 ===");
+      console.log("result:", data.result);
+      console.log("mySocketId:", data.mySocketId);
+      console.log("enemySocketId:", data.enemySocketId);
+      console.log("myTitle:", data.myTitle);
+      console.log("enemyTitle2:", data.enemyTitle2);
+      console.log("==========================");
 
-  //     console.log("round_result通った");
-  //     console.log(`myTitle: ${myTitle}, data.enemyTitle1: ${data.enemyTitle1}`);
-  //   });
+      // ここではまだ処理しない
+    });
 
-  //   // クリーンアップ
-  //   return () => {
-  //     socket.off("round_result");
-  //   };
-  // }, [myTitle, handleDisplayResult]);
+    return () => {
+      socket.off("round_result");
+    };
+  }, []);
 
   const decisionClick = () => {
     console.log(myHandSrc);
@@ -132,12 +128,12 @@ const Play = () => {
       [adjustTitle(myTitle)]: Math.max(0, prevItems[adjustTitle(myTitle)] - 1), // 動的にキーを決めて値を減らす
     }));
 
-    // // バックエンドに出した手のデータを送る
-    // socket.emit("player_choice", {
-    //   roomName: roomId, // サーバーから受け取ったルーム名
-    //   playerId: socketId, // 自分のソケットID
-    //   choice: myTitle, // 選択した手
-    // });
+    // バックエンドに出した手のデータを送る
+    socket.emit("player_choice", {
+      roomName: roomId, // サーバーから受け取ったルーム名
+      socketId: socketId, // 自分のソケットID
+      choice: myTitle, // 選択した手
+    });
     console.log(
       `roomId: ${roomId}, socket.id: ${socketId}, choice: ${myTitle}`
     );
