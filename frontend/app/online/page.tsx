@@ -2,42 +2,15 @@
 
 import TitleRPS from "../components/features/SelectGame/TitleRPS";
 import Button from "../components/elements/button/Button";
-import { io, Socket } from "socket.io-client";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useRoomContext } from "../components/contexts/roomContext";
-import { useSocketContext } from "../components/contexts/socketContext";
-
-let socket: Socket;
+import { useSocket } from "../components/contexts/socketContext2"; // 新しくsocketの機能をContextで行ってくれるやつ
 
 const Online = () => {
-  const [isMatched, setIsMatched] = useState(false);
-  const { roomId, setRoomId } = useRoomContext();
-  const { socketId, setSocketId } = useSocketContext();
+  const { isMatched, handleMatchStart } = useSocket();
   const router = useRouter();
 
-  const handleMatchStart = () => {
-    if (!socket) {
-      socket = io("http://localhost:4000", {
-        autoConnect: true,
-        reconnection: true,
-      });
-      socket.on("match_found", (data) => {
-        setIsMatched(true);
-        console.log("マッチング成功");
-
-        console.log(`メッセージ: ${data.message}`);
-        console.log(`対戦相手は: ${data.players}です`); // 配列が表示される
-        console.log(`ルーム名: ${data.roomName}`);
-        setRoomId(data.roomName);
-        if (socket.id) setSocketId(socket.id);
-        console.log(roomId, socketId);
-      });
-    }
-    socket.emit("start_matching", { username: "プレイヤー１" });
-  };
-
-  // 3秒後に対戦画面に遷移 ここにsetIsMatched(false)いれてもいいかも？
+  // 3秒後に対戦画面に遷移
   useEffect(() => {
     if (isMatched) {
       const timer = setTimeout(() => {
