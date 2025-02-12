@@ -130,7 +130,7 @@ const Play = () => {
     if (gameResult && gameGetPoint) {
       handleDisplayResult();
     }
-  }, [gameResult, gameGetPoint]);
+  }, [gameResult, gameGetPoint, handleDisplayResult]);
 
   const decisionClick = () => {
     console.log(myHandSrc);

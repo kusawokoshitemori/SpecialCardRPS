@@ -16,18 +16,96 @@ const waitingPlayers = [];
 const gameRooms = {}; // ルームごとの情報を管理
 
 // 勝敗判定関数
+const WIN_TABLE = {
+  グー: {
+    グー: ["draw", 0],
+    チョキ: ["player1", 1],
+    パー: ["player2", 1],
+    無限パー: ["player2", 2],
+    封印: ["draw", 0],
+    全知全能: ["draw", 0],
+    リバース: ["draw", 0],
+    ミラー: ["player2", 1],
+  },
+  チョキ: {
+    グー: ["player2", 1],
+    チョキ: ["draw", 0],
+    パー: ["player1", 1],
+    無限パー: ["player1", 1],
+    封印: ["draw", 0],
+    全知全能: ["draw", 0],
+    リバース: ["draw", 0],
+    ミラー: ["player2", 1],
+  },
+  パー: {
+    グー: ["player1", 1],
+    チョキ: ["player2", 1],
+    パー: ["draw", 0],
+    無限パー: ["draw", 0],
+    封印: ["draw", 0],
+    全知全能: ["draw", 0],
+    リバース: ["draw", 0],
+    ミラー: ["player2", 1],
+  },
+  無限パー: {
+    グー: ["player1", 2],
+    チョキ: ["player2", 1],
+    パー: ["draw", 0],
+    無限パー: ["draw", 0],
+    封印: ["draw", 0],
+    全知全能: ["draw", 0],
+    リバース: ["draw", 0],
+    ミラー: ["player1", 3],
+  },
+  封印: {
+    グー: ["draw", 0],
+    チョキ: ["draw", 0],
+    パー: ["draw", 0],
+    無限パー: ["draw", 0],
+    封印: ["draw", 0],
+    全知全能: ["draw", 0],
+    リバース: ["draw", 0],
+    ミラー: ["draw", 0],
+  },
+  全知全能: {
+    グー: ["draw", 0],
+    チョキ: ["draw", 0],
+    パー: ["draw", 0],
+    無限パー: ["draw", 0],
+    封印: ["draw", 0],
+    全知全能: ["draw", 0],
+    リバース: ["draw", 0],
+    ミラー: ["draw", 0],
+  },
+  リバース: {
+    グー: ["draw", 0],
+    チョキ: ["draw", 0],
+    パー: ["draw", 0],
+    無限パー: ["draw", 0],
+    封印: ["draw", 0],
+    全知全能: ["draw", 0],
+    リバース: ["draw", 0],
+    ミラー: ["draw", 0],
+  },
+  ミラー: {
+    グー: ["player2", 1],
+    チョキ: ["player2", 1],
+    パー: ["player2", 1],
+    無限パー: ["player1", 3],
+    封印: ["draw", 0],
+    全知全能: ["draw", 0],
+    リバース: ["draw", 0],
+    ミラー: ["draw", 0],
+  },
+};
+
 const determineWinner = (choice1, choice2) => {
-  if (choice1 === choice2) return { result: "draw", getPoint: 1 };
-
-  if (
-    (choice1 === "グー" && choice2 === "チョキ") ||
-    (choice1 === "チョキ" && choice2 === "パー") ||
-    (choice1 === "パー" && choice2 === "グー")
-  ) {
-    return { result: "player1", getPoint: 1 }; // player1勝利、1ポイント
-  }
-
-  return { result: "player2", getPoint: 1 }; // player2勝利、1ポイント
+  return WIN_TABLE[choice1]?.[choice2]
+    ? {
+        result: WIN_TABLE[choice1][choice2][0],
+        getPoint: WIN_TABLE[choice1][choice2][1],
+      }
+    : { result: "draw", getPoint: 0 };
 };
 
 // クライアントと接続
