@@ -26,7 +26,7 @@ const Play = () => {
   const [showBattleText, setShowBattleText] = useState(false); // 「勝負」というテキスト
   const [isFlipped, setIsFlipped] = useState(true); // trueなら裏面、falseなら表面
   const [specialTitle, setSpecialTitle] = useState("ミラー");
-  const [gameGetPoint, setGameGetPoint] = useState(0);
+  const [gameGetPoint, setGameGetPoint] = useState<number | null>(null);
   const [items, setItems] = useState({
     グー: 2,
     チョキ: 2,
@@ -52,7 +52,8 @@ const Play = () => {
     setTimeout(() => {
       setShowBattleText(false); // 2秒後に非表示
       setIsFlipped(false); // その後にフリップアクション
-      ScoreCount({ gameResult, gameGetPoint, setMyScore, setEnemyScore }); // この関数で点数を管理する
+      if (gameGetPoint !== null)
+        ScoreCount({ gameResult, gameGetPoint, setMyScore, setEnemyScore }); // この関数で点数を管理する
       console.log(`ScoreCount通った ${gameResult},${gameGetPoint}`);
       // 5秒後に全リセット
       setTimeout(() => {
@@ -127,7 +128,9 @@ const Play = () => {
   }, [socket, socketId]);
 
   useEffect(() => {
-    if (gameResult && gameGetPoint) {
+    console.log(`${gameResult},${gameGetPoint}`);
+    if (gameResult && gameGetPoint !== null) {
+      console.log("動いた");
       handleDisplayResult();
     }
   }, [gameResult, gameGetPoint, handleDisplayResult]);
