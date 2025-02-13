@@ -13,11 +13,7 @@ interface SocketContextType {
 
 const SocketContext = createContext<SocketContextType | undefined>(undefined);
 
-export const SocketProvider2 = ({
-  children,
-}: {
-  children: React.ReactNode;
-}) => {
+export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
   const [socket, setSocket] = useState<Socket | null>(null);
   const [roomId, setRoomId] = useState("");
   const [socketId, setSocketId] = useState("");
@@ -77,7 +73,7 @@ export const SocketProvider2 = ({
 export const useSocket = () => {
   const context = useContext(SocketContext);
   if (!context) {
-    throw new Error("useSocket は SocketProvider2 内で使用してください");
+    throw new Error("useSocket は SocketProvider 内で使用してください");
   }
   return context;
 };
