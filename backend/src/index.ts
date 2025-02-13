@@ -1,3 +1,5 @@
+import winTable from "./data/winTable";
+
 const express = require("express");
 const app = express();
 
@@ -15,95 +17,11 @@ const PORT = 4000;
 const waitingPlayers = [];
 const gameRooms = {}; // ルームごとの情報を管理
 
-// 勝敗判定関数　ここ治すところから
-const WIN_TABLE = {
-  グー: {
-    グー: ["draw", 0],
-    チョキ: ["player1", 1],
-    パー: ["player2", 1],
-    無限パー: ["player2", 2],
-    封印: ["draw", 0],
-    全知全能: ["draw", 0],
-    リバース: ["draw", 0],
-    ミラー: ["player1", 1],
-  },
-  チョキ: {
-    グー: ["player2", 1],
-    チョキ: ["draw", 0],
-    パー: ["player1", 1],
-    無限パー: ["player1", 1],
-    封印: ["draw", 0],
-    全知全能: ["draw", 0],
-    リバース: ["draw", 0],
-    ミラー: ["player1", 1],
-  },
-  パー: {
-    グー: ["player1", 1],
-    チョキ: ["player2", 1],
-    パー: ["draw", 0],
-    無限パー: ["draw", 0],
-    封印: ["draw", 0],
-    全知全能: ["draw", 0],
-    リバース: ["draw", 0],
-    ミラー: ["player1", 1],
-  },
-  無限パー: {
-    グー: ["player1", 2],
-    チョキ: ["player2", 1],
-    パー: ["draw", 0],
-    無限パー: ["draw", 0],
-    封印: ["draw", 0],
-    全知全能: ["draw", 0],
-    リバース: ["draw", 0],
-    ミラー: ["player2", 3],
-  },
-  封印: {
-    グー: ["draw", 0],
-    チョキ: ["draw", 0],
-    パー: ["draw", 0],
-    無限パー: ["draw", 0],
-    封印: ["draw", 0],
-    全知全能: ["draw", 0],
-    リバース: ["draw", 0],
-    ミラー: ["player2", 3],
-  },
-  全知全能: {
-    グー: ["draw", 0],
-    チョキ: ["draw", 0],
-    パー: ["draw", 0],
-    無限パー: ["draw", 0],
-    封印: ["draw", 0],
-    全知全能: ["draw", 0],
-    リバース: ["draw", 0],
-    ミラー: ["player2", 3],
-  },
-  リバース: {
-    グー: ["draw", 0],
-    チョキ: ["draw", 0],
-    パー: ["draw", 0],
-    無限パー: ["draw", 0],
-    封印: ["draw", 0],
-    全知全能: ["draw", 0],
-    リバース: ["draw", 0],
-    ミラー: ["player2", 3],
-  },
-  ミラー: {
-    グー: ["player2", 1],
-    チョキ: ["player2", 1],
-    パー: ["player2", 1],
-    無限パー: ["player1", 3],
-    封印: ["player1", 3],
-    全知全能: ["player1", 3],
-    リバース: ["player1", 3],
-    ミラー: ["draw", 0],
-  },
-};
-
 const determineWinner = (choice1, choice2) => {
-  return WIN_TABLE[choice1]?.[choice2]
+  return winTable[choice1]?.[choice2]
     ? {
-        result: WIN_TABLE[choice1][choice2][0],
-        getPoint: WIN_TABLE[choice1][choice2][1],
+        result: winTable[choice1][choice2][0],
+        getPoint: winTable[choice1][choice2][1],
       }
     : { result: "draw", getPoint: 0 };
 };
