@@ -15,7 +15,7 @@ const PORT = 4000;
 const waitingPlayers = [];
 const gameRooms = {}; // ルームごとの情報を管理
 
-// 勝敗判定関数
+// 勝敗判定関数　ここ治すところから
 const WIN_TABLE = {
   グー: {
     グー: ["draw", 0],
@@ -25,7 +25,7 @@ const WIN_TABLE = {
     封印: ["draw", 0],
     全知全能: ["draw", 0],
     リバース: ["draw", 0],
-    ミラー: ["player2", 1],
+    ミラー: ["player1", 1],
   },
   チョキ: {
     グー: ["player2", 1],
@@ -35,7 +35,7 @@ const WIN_TABLE = {
     封印: ["draw", 0],
     全知全能: ["draw", 0],
     リバース: ["draw", 0],
-    ミラー: ["player2", 1],
+    ミラー: ["player1", 1],
   },
   パー: {
     グー: ["player1", 1],
@@ -45,7 +45,7 @@ const WIN_TABLE = {
     封印: ["draw", 0],
     全知全能: ["draw", 0],
     リバース: ["draw", 0],
-    ミラー: ["player2", 1],
+    ミラー: ["player1", 1],
   },
   無限パー: {
     グー: ["player1", 2],
@@ -55,7 +55,7 @@ const WIN_TABLE = {
     封印: ["draw", 0],
     全知全能: ["draw", 0],
     リバース: ["draw", 0],
-    ミラー: ["player1", 3],
+    ミラー: ["player2", 3],
   },
   封印: {
     グー: ["draw", 0],
@@ -65,7 +65,7 @@ const WIN_TABLE = {
     封印: ["draw", 0],
     全知全能: ["draw", 0],
     リバース: ["draw", 0],
-    ミラー: ["draw", 0],
+    ミラー: ["player2", 3],
   },
   全知全能: {
     グー: ["draw", 0],
@@ -75,7 +75,7 @@ const WIN_TABLE = {
     封印: ["draw", 0],
     全知全能: ["draw", 0],
     リバース: ["draw", 0],
-    ミラー: ["draw", 0],
+    ミラー: ["player2", 3],
   },
   リバース: {
     グー: ["draw", 0],
@@ -85,16 +85,16 @@ const WIN_TABLE = {
     封印: ["draw", 0],
     全知全能: ["draw", 0],
     リバース: ["draw", 0],
-    ミラー: ["draw", 0],
+    ミラー: ["player2", 3],
   },
   ミラー: {
     グー: ["player2", 1],
     チョキ: ["player2", 1],
     パー: ["player2", 1],
     無限パー: ["player1", 3],
-    封印: ["draw", 0],
-    全知全能: ["draw", 0],
-    リバース: ["draw", 0],
+    封印: ["player1", 3],
+    全知全能: ["player1", 3],
+    リバース: ["player1", 3],
     ミラー: ["draw", 0],
   },
 };
