@@ -77,7 +77,7 @@ io.on("connection", (socket) => {
 
   // プレイヤーの選択を受け取る
   socket.on("player_choice", (data) => {
-    const { roomName, socketId, choice } = data;
+    const { roomName, socketId, choice, isReverse, isBanSpecialCard } = data;
     console.log("受信したデータ:", data);
 
     if (!gameRooms[roomName]) {
@@ -100,10 +100,20 @@ io.on("connection", (socket) => {
     if (room.players.every((p) => p.choice)) {
       console.log("勝利判定をします");
       const [player1, player2] = room.players;
-      const { result, getPoint } = determineWinner(
+      let { result, getPoint } = determineWinner(
         player1.choice,
         player2.choice
       );
+      // リバースと封印の効果みる
+      if (isBanSpecialCard) console.log("封印中なのに特殊カードが使用された");
+      if (isReverse) {
+        if (result === "player1") result = "player2";
+        else if (result === "player2") result = "player1";
+      }
+      console.log(
+        "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+      );
+      console.log(`result: ${result} isReverse: ${isReverse}`);
 
       if (result === "player1") {
         player1.points += getPoint;

@@ -35,6 +35,8 @@ const Play = () => {
   });
   const [myScore, setMyScore] = useState<number>(0);
   const [enemyScore, setEnemyScore] = useState<number>(0);
+  const [isReverse, setIsReverse] = useState(false); // リバースを選択していた場合勝敗が逆転する
+  const [isBanSpecialCard, setIsBanSpecialCard] = useState(false); // 相手が封印を選択していた場合特殊カードが打てなくなる
 
   // テスト
   useEffect(() => {
@@ -98,6 +100,12 @@ const Play = () => {
         setEnemyTitle(data.enemyTitle2);
         setEnemyHandSrc(SearchSrc(data.enemyTitle2));
         console.log(`相手の手:${data.enemyTitle2}`);
+
+        // リバース、封印の確認
+        if (data.myTitle === "リバース") setIsReverse((prev) => !prev);
+        if (data.enemyTitle2 === "リバース") setIsReverse((prev) => !prev);
+        if (data.enemyTitle2 === "封印") setIsBanSpecialCard((prev) => !prev);
+
         // ここでsockeIdを用いてgameResultを分かりやすくする
         if (data.result === "player1") {
           setGameResult("win");
@@ -114,6 +122,12 @@ const Play = () => {
         setEnemyHandSrc(SearchSrc(data.myTitle));
         console.log(`相手の手:${data.myTitle}`);
         console.log("違うんだけどー");
+
+        // リバース、封印の確認
+        if (data.enemyTitle2 === "リバース") setIsReverse((prev) => !prev);
+        if (data.myTitle === "リバース") setIsReverse((prev) => !prev);
+        if (data.myTitle === "封印") setIsBanSpecialCard((prev) => !prev);
+
         // ここでsockeIdを用いてgameResultを分かりやすくする
         if (data.result === "player2") setGameResult("win");
         else if (data.result === "player1") setGameResult("lose");
@@ -167,9 +181,11 @@ const Play = () => {
       roomName: roomId, // サーバーから受け取ったルーム名
       socketId: socketId, // 自分のソケットID
       choice: myTitle, // 選択した手
+      isReverse,
+      isBanSpecialCard,
     });
     console.log(
-      `roomId: ${roomId}, socket.id: ${socketId}, choice: ${myTitle}`
+      `roomId: ${roomId}, socket.id: ${socketId}, choice: ${myTitle}, isReverse: ${isReverse}, isBunSpecialCard: ${isBanSpecialCard}`
     );
   };
 
