@@ -87,6 +87,8 @@ const Play = () => {
       console.log("enemySocketId:", data.enemySocketId);
       console.log("myTitle:", data.myTitle);
       console.log("enemyTitle2:", data.enemyTitle2);
+      console.log("mySpecial:", data.mySpecial);
+      console.log("enemySpecial:", data.enemySpecial);
       console.log("==========================");
 
       // リバースと封印の確認
@@ -136,7 +138,7 @@ const Play = () => {
     return () => {
       socket.off("round_result");
     };
-  }, [socket, socketId]);
+  }, [socket, socketId, isReverse, isBanSpecialCard]);
 
   useEffect(() => {
     console.log(`${gameResult},${gameGetPoint}`);
@@ -157,7 +159,6 @@ const Play = () => {
       setIsDecision(false);
       return;
     }
-    setIsDecision(true);
 
     // グー、チョキ、パー以外はspecialとして扱う配列
     const adjustTitle = (title: string) => {
@@ -166,6 +167,14 @@ const Play = () => {
       else if (title === "パー") return "パー";
       else return "special";
     };
+
+    // 封印で禁止されている場合にフロントエンド側で特殊カードを選択できないように
+    if (isBanSpecialCard && adjustTitle(myTitle) === "special") {
+      alert("封印効果発動中の為、選択できません");
+      return;
+    }
+
+    setIsDecision(true);
 
     // myTitleが「グー」や「チョキ」や「パー」の場合、そのまま、それ以外は「special」として扱う
     setItems((prevItems) => ({
@@ -180,6 +189,7 @@ const Play = () => {
       choice: myTitle, // 選択した手
       isReverse,
       isBanSpecialCard,
+      specialTitle,
     });
     console.log(
       `roomId: ${roomId}, socket.id: ${socketId}, choice: ${myTitle}, isReverse: ${isReverse}, isBunSpecialCard: ${isBanSpecialCard}`

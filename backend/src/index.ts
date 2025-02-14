@@ -54,12 +54,14 @@ io.on("connection", (socket) => {
             username: player1.username,
             choice: null,
             points: 0,
+            specialCard: "",
           },
           {
             id: player2.socket.id,
             username: player2.username,
             choice: null,
             points: 0,
+            specialCard: "",
           },
         ],
       };
@@ -77,7 +79,14 @@ io.on("connection", (socket) => {
 
   // プレイヤーの選択を受け取る
   socket.on("player_choice", (data) => {
-    const { roomName, socketId, choice, isReverse, isBanSpecialCard } = data;
+    const {
+      roomName,
+      socketId,
+      choice,
+      isReverse,
+      isBanSpecialCard,
+      specialTitle,
+    } = data;
     console.log("受信したデータ:", data);
 
     if (!gameRooms[roomName]) {
@@ -94,6 +103,7 @@ io.on("connection", (socket) => {
     }
 
     player.choice = choice;
+    player.specialCard = specialTitle;
     console.log(`${player.username} が ${choice} を選択しました`);
 
     // 両プレイヤーの選択が揃ったら勝敗を判定
@@ -110,10 +120,6 @@ io.on("connection", (socket) => {
         if (result === "player1") result = "player2";
         else if (result === "player2") result = "player1";
       }
-      console.log(
-        "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
-      );
-      console.log(`result: ${result} isReverse: ${isReverse}`);
 
       if (result === "player1") {
         player1.points += getPoint;
@@ -123,8 +129,6 @@ io.on("connection", (socket) => {
         console.log(`player2が${getPoint}獲得しました`);
       }
 
-      // round_resultにgetPointを付け加えて
-
       io.to(roomName).emit("round_result", {
         result,
         getPoint,
@@ -132,6 +136,8 @@ io.on("connection", (socket) => {
         enemySocketId: player2.id,
         myTitle: player1.choice,
         enemyTitle2: player2.choice,
+        mySpecial: player1.specialCard,
+        enemySpecial: player2.specialCard,
       });
 
       // 次のラウンドの準備
