@@ -13,15 +13,15 @@ import ScoreCount from "../components/features/Play/scoreCount";
 import { useSocket } from "../components/contexts/socketContext2";
 
 const Play = () => {
-  const { socket, roomId, socketId } = useSocket(); // useSocketを使用している
+  const { socket, roomId, socketId } = useSocket(); // useSocketを使用
 
   const [myHandSrc, setMyHandSrc] = useState("");
   const [myTitle, setMyTitle] = useState("");
   const [gameResult, setGameResult] = useState<"win" | "draw" | "lose" | "">(
     ""
-  ); // 結果を使ったら空の文字列にする
-  const [enemyHandSrc, setEnemyHandSrc] = useState(""); // 結果を使ったら空の文字列にする
-  const [enemyTitle, setEnemyTitle] = useState(""); // 結果を使ったら空の文字列にする
+  );
+  const [enemyHandSrc, setEnemyHandSrc] = useState("");
+  const [enemyTitle, setEnemyTitle] = useState("");
   const [isDecision, setIsDecision] = useState(false);
   const [showBattleText, setShowBattleText] = useState(false); // 「勝負」というテキスト
   const [isFlipped, setIsFlipped] = useState(true); // trueなら裏面、falseなら表面
@@ -37,13 +37,6 @@ const Play = () => {
   const [enemyScore, setEnemyScore] = useState<number>(0);
   const [isReverse, setIsReverse] = useState(false); // リバースを選択していた場合勝敗が逆転する
   const [isBanSpecialCard, setIsBanSpecialCard] = useState(false); // 相手が封印を選択していた場合特殊カードが打てなくなる
-
-  // テスト
-  useEffect(() => {
-    if (socket) {
-      console.log("Socket インスタンス:", socket);
-    }
-  }, [socket]);
 
   useEffect(() => {
     setSpecialTitle(randomSpecialTitle());
@@ -95,6 +88,10 @@ const Play = () => {
       console.log("myTitle:", data.myTitle);
       console.log("enemyTitle2:", data.enemyTitle2);
       console.log("==========================");
+
+      // リバースと封印の確認
+      if (isReverse) setIsReverse(false);
+      if (isBanSpecialCard) setIsBanSpecialCard(false);
 
       if (socketId === data.mySocketId) {
         setEnemyTitle(data.enemyTitle2);
