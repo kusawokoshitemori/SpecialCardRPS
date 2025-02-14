@@ -37,6 +37,7 @@ const Play = () => {
   const [enemyScore, setEnemyScore] = useState<number>(0);
   const [isReverse, setIsReverse] = useState(false); // リバースを選択していた場合勝敗が逆転する
   const [isBanSpecialCard, setIsBanSpecialCard] = useState(false); // 相手が封印を選択していた場合特殊カードが打てなくなる
+  const [enemySpecialCard, setEnemySpecialCard] = useState("");
 
   useEffect(() => {
     setSpecialTitle(randomSpecialTitle());
@@ -89,9 +90,10 @@ const Play = () => {
       console.log("enemyTitle2:", data.enemyTitle2);
       console.log("mySpecial:", data.mySpecial);
       console.log("enemySpecial:", data.enemySpecial);
+      console.log(enemySpecialCard);
       console.log("==========================");
 
-      // リバースと封印の確認
+      // リバースと封印と全知全能の確認
       if (isReverse) setIsReverse(false);
       if (isBanSpecialCard) setIsBanSpecialCard(false);
 
@@ -105,8 +107,15 @@ const Play = () => {
         if (data.enemyTitle2 === "リバース") setIsReverse((prev) => !prev);
         if (data.enemyTitle2 === "封印") setIsBanSpecialCard((prev) => !prev);
 
-        // ここでsockeIdを用いてgameResultを分かりやすくする
+        // 全知全能の効力発動するかどうか
+        console.log(`全知全能: ${data.myTitle}`);
+        if (data.myTitle === "全知全能") {
+          setEnemySpecialCard(data.mySpecial);
+          console.log("動いたやった");
+        }
+
         if (data.result === "player1") {
+          // ここでsockeIdを用いてgameResultを分かりやすくする
           setGameResult("win");
           console.log("setGameResult win!!!");
         } else if (data.result === "player2") {
@@ -127,6 +136,13 @@ const Play = () => {
         if (data.myTitle === "リバース") setIsReverse((prev) => !prev);
         if (data.myTitle === "封印") setIsBanSpecialCard((prev) => !prev);
 
+        // 全知全能の効力発動するかどうか
+        console.log(`全知全能: ${data.enemyTitle}`);
+        if (data.enemyTitle2 === "全知全能") {
+          setEnemySpecialCard(data.enemySpecial);
+          console.log("動いたやった");
+        }
+
         // ここでsockeIdを用いてgameResultを分かりやすくする
         if (data.result === "player2") setGameResult("win");
         else if (data.result === "player1") setGameResult("lose");
@@ -143,13 +159,11 @@ const Play = () => {
   useEffect(() => {
     console.log(`${gameResult},${gameGetPoint}`);
     if (gameResult && gameGetPoint !== null) {
-      console.log("動いた");
       handleDisplayResult();
     }
   }, [gameResult, gameGetPoint, handleDisplayResult]);
 
   const decisionClick = () => {
-    console.log(myHandSrc);
     if (isDecision) {
       alert("カードは既に選択されています");
       return;
