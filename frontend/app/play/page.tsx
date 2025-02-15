@@ -157,19 +157,44 @@ const Play = () => {
     };
   }, [socket, socketId, isReverse, isBanSpecialCard, enemySpecialCard]);
 
+  // ゲーム終了時動作
   const router = useRouter();
-
   useEffect(() => {
     socket?.on("game_end", (data) => {
-      console.log(data);
+      console.log("data:", data);
+      console.log("mySocketId check:", data.mySocketId === socketId);
 
+      if (data.mySocketId === socketId) {
+        console.log("myの方と一致しました");
+        console.log(`my:${data.myPoint},enemy:${data.enemyPoint}`);
+        localStorage.setItem(
+          `gameData_${socketId}`,
+          JSON.stringify({
+            myPoint: data.myPoint,
+            enemyPoint: data.enemyPoint,
+          })
+        );
+      } else if (data.enemySocketId === socketId) {
+        console.log("enemyの方と一致しました");
+        console.log(`my:${data.enemyPoint},enemy:${data.myPoint}`);
+        localStorage.setItem(
+          `gameData_${socketId}`,
+          JSON.stringify({
+            myPoint: data.enemyPoint,
+            enemyPoint: data.myPoint,
+          })
+        );
+      }
+      console.log("保存されたデータ:", localStorage.getItem("gameData"));
+
+      // 3秒後に結果ページへ遷移
       const timer = setTimeout(() => {
-        router.push("result");
+        router.push("/result");
       }, 3000);
 
       return () => clearTimeout(timer);
     });
-  }, [socket, router]);
+  }, [socket, router, socketId]);
 
   useEffect(() => {
     console.log(`${gameResult},${gameGetPoint}`);
