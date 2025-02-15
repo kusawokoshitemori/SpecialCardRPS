@@ -145,10 +145,11 @@ io.on("connection", (socket) => {
 
       // 試合終了条件をチェック
       if (player1.points >= 3 || player2.points >= 3) {
-        const winner = player1.points >= 3 ? player1 : player2;
         io.to(roomName).emit("game_end", {
-          message: `試合終了！${winner.username} の勝利！`,
-          players: room.players,
+          myPoint: player1.points,
+          enemyPoint: player2.points,
+          mySocketId: player1.id,
+          enemySocketId: player2.id,
         });
 
         // ルームを削除

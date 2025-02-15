@@ -11,6 +11,7 @@ import SearchSrc from "../components/features/Play/SearchSrc";
 import randomSpecialTitle from "../components/features/Play/specialTitle";
 import ScoreCount from "../components/features/Play/scoreCount";
 import { useSocket } from "../components/contexts/socketContext2";
+import { useRouter } from "next/navigation";
 
 const Play = () => {
   const { socket, roomId, socketId } = useSocket(); // useSocketを使用
@@ -79,7 +80,7 @@ const Play = () => {
   ]);
 
   useEffect(() => {
-    socket.on("round_result", (data) => {
+    socket?.on("round_result", (data) => {
       // 受け取ったデータを確認
       console.log("=== round_result 受信 ===");
       console.log("result:", data.result);
@@ -152,9 +153,23 @@ const Play = () => {
     });
 
     return () => {
-      socket.off("round_result");
+      socket?.off("round_result");
     };
-  }, [socket, socketId, isReverse, isBanSpecialCard]);
+  }, [socket, socketId, isReverse, isBanSpecialCard, enemySpecialCard]);
+
+  const router = useRouter();
+
+  useEffect(() => {
+    socket?.on("game_end", (data) => {
+      console.log(data);
+
+      const timer = setTimeout(() => {
+        router.push("result");
+      }, 3000);
+
+      return () => clearTimeout(timer);
+    });
+  }, [socket, router]);
 
   useEffect(() => {
     console.log(`${gameResult},${gameGetPoint}`);
@@ -197,7 +212,7 @@ const Play = () => {
     }));
 
     // バックエンドに出した手のデータを送る
-    socket.emit("player_choice", {
+    socket?.emit("player_choice", {
       roomName: roomId, // サーバーから受け取ったルーム名
       socketId: socketId, // 自分のソケットID
       choice: myTitle, // 選択した手
