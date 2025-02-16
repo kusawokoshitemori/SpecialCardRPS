@@ -6,6 +6,7 @@ interface ButtonProps {
   subText2: string;
   bgColor: string;
   subTextColor: string;
+  addClass?: string;
   onClick?: () => void;
 }
 
@@ -15,12 +16,13 @@ const Button = ({
   subText2,
   bgColor,
   subTextColor,
+  addClass,
   onClick,
 }: ButtonProps) => {
   return (
     <div
       role="button"
-      className={`w-2/3 h-36 ${bgColor} text-white flex items-start justify-center rounded-lg cursor-pointer border-2 blue-text-outline border-blue-900 focus:outline-none focus:ring-2 relative`}
+      className={`w-2/3 h-36 ${bgColor} text-white flex items-start justify-center rounded-lg cursor-pointer border-2 blue-text-outline border-blue-900 focus:outline-none focus:ring-2 relative ${addClass}`}
       onClick={onClick}
     >
       <span className="text-4xl mt-4 font-bold">{text}</span>

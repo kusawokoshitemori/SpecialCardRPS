@@ -21,15 +21,7 @@ const Result = () => {
 
   return (
     <div>
-      <ResultLayout gameData={gameData} />;
-      {gameData ? (
-        <div>
-          <p>My Point: {gameData.myPoint}</p>
-          <p>Enemy Point: {gameData.enemyPoint}</p>
-        </div>
-      ) : (
-        <p>Loading...</p>
-      )}
+      <ResultLayout gameData={gameData} />
     </div>
   );
 };
