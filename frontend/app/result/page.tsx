@@ -18,7 +18,7 @@ const Result = () => {
       console.log("Parsed Data:", parsedData); // パース後のデータを確認
       setGameData(parsedData); // localStorage からデータを取得してセット
     }
-  }, []);
+  }, [socketId]);
 
   return (
     <div>

@@ -26,6 +26,8 @@ const determineWinner = (choice1, choice2) => {
     : { result: "draw", getPoint: 0 };
 };
 
+let roundCount = 0;
+
 // クライアントと接続
 io.on("connection", (socket) => {
   console.log("クライアントと接続しました");
@@ -74,6 +76,8 @@ io.on("connection", (socket) => {
 
       console.log(`ルーム作成: ${roomName}`);
       console.log(`マッチング成立: ${player1.username} vs ${player2.username}`);
+      // ここでroundCountを0にリセットする必要あるかも
+      roundCount = 0;
     }
   });
 
@@ -109,6 +113,9 @@ io.on("connection", (socket) => {
     // 両プレイヤーの選択が揃ったら勝敗を判定
     if (room.players.every((p) => p.choice)) {
       console.log("勝利判定をします");
+      //ここでroundCountを足すぞ
+      roundCount++;
+      console.log(`roundCount: ${roundCount}`);
       const [player1, player2] = room.players;
       let { result, getPoint } = determineWinner(
         player1.choice,
@@ -144,7 +151,7 @@ io.on("connection", (socket) => {
       room.players.forEach((p) => (p.choice = null));
 
       // 試合終了条件をチェック
-      if (player1.points >= 3 || player2.points >= 3) {
+      if (player1.points >= 3 || player2.points >= 3 || roundCount >= 6) {
         io.to(roomName).emit("game_end", {
           myPoint: player1.points,
           enemyPoint: player2.points,
