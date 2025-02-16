@@ -22,3 +22,10 @@
     transform-style: preserve-3d;
   }
 }
+
+@layer base {
+  body {
+    @apply bg-cover bg-center bg-fixed;
+    background-image: url("/backGround/treeBlue.jpg");
+  }
+}

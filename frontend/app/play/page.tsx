@@ -82,19 +82,6 @@ const Play = () => {
 
   useEffect(() => {
     socket?.on("round_result", (data) => {
-      // 受け取ったデータを確認
-      console.log("=== round_result 受信 ===");
-      console.log("result:", data.result);
-      console.log("getPoint:", data.getPoint);
-      console.log("mySocketId:", data.mySocketId);
-      console.log("enemySocketId:", data.enemySocketId);
-      console.log("myTitle:", data.myTitle);
-      console.log("enemyTitle2:", data.enemyTitle2);
-      console.log("mySpecial:", data.mySpecial);
-      console.log("enemySpecial:", data.enemySpecial);
-      console.log(enemySpecialCard);
-      console.log("==========================");
-
       // リバースと封印と全知全能の確認
       if (isReverse) setIsReverse(false);
       if (isBanSpecialCard) setIsBanSpecialCard(false);
@@ -273,7 +260,14 @@ const Play = () => {
   };
 
   return (
-    <div className="flex items-center justify-center flex-col">
+    <div
+      className="flex items-center justify-center flex-col bg-cover bg-center min-h-screen"
+      style={{
+        backgroundImage: `url(${
+          isReverse ? "/backGround/treeRed.jpg" : "/backGround/treeGreen.jpg"
+        })`,
+      }}
+    >
       <Timer isTimerStop={isDecision} />
       <div className="flex flex-row">
         {/* 自分のカード */}
