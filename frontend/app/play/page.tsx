@@ -40,6 +40,7 @@ const Play = () => {
   const [isReverse, setIsReverse] = useState(false); // リバースを選択していた場合勝敗が逆転する
   const [isBanSpecialCard, setIsBanSpecialCard] = useState(false); // 相手が封印を選択していた場合特殊カードが打てなくなる
   const [enemySpecialCard, setEnemySpecialCard] = useState("");
+  const [isTimerStop, setIsTimerStop] = useState(false);
 
   useEffect(() => {
     setSpecialTitle(randomSpecialTitle());
@@ -274,7 +275,7 @@ const Play = () => {
 
   return (
     <div className="flex items-center justify-center flex-col">
-      <Timer />
+      <Timer isTimerStop={isTimerStop} setIsTimerStop={setIsTimerStop} />
       <div className="flex flex-row">
         {/* 自分のカード */}
         {myHandSrc ? (
