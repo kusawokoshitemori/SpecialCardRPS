@@ -1,30 +1,27 @@
 "use client";
 import Button from "../components/elements/button/Button";
+import { useRouter } from "next/navigation";
+import DisplayPoint from "../components/elements/point/DisplayPoint";
 
 const ResultLayout = ({
   gameData,
 }: {
   gameData: { myPoint: number; enemyPoint: number } | null;
 }) => {
+  // タイトル画面に戻る
+  const router = useRouter();
   const handleBackTitle = () => {
-    console.log("後でゲーム制作画面に戻る機能つける");
+    router.push("selectGame");
   };
   return (
     <div className="flex items-center justify-center flex-col">
       <h1 className="text-6xl py-8">Result</h1>
       {gameData ? (
-        <div className="flex justify-center items-center">
-          <div className="flex items-center justify-center flex-col">
-            <p className="text-[200px] font-bold">{gameData.myPoint}</p>
-            <p className="text-bold text-3xl">あなた</p>
-          </div>
-
-          <p className="text-[100px] font-bold mx-12">vs</p>
-          <div className="flex items-center justify-center flex-col">
-            <p className="text-[200px] font-bold">{gameData.enemyPoint}</p>
-            <p className="text-bold text-3xl">相手</p>
-          </div>
-        </div>
+        <DisplayPoint
+          myPoint={gameData.myPoint}
+          enemyPoint={gameData.enemyPoint}
+          textSizeClass="text-[200px]"
+        />
       ) : (
         <p className="flex items-center justify-center">Loading...</p>
       )}

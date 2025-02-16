@@ -12,6 +12,7 @@ import randomSpecialTitle from "../components/features/Play/specialTitle";
 import ScoreCount from "../components/features/Play/scoreCount";
 import { useSocket } from "../components/contexts/socketContext";
 import { useRouter } from "next/navigation";
+import DisplayPoint from "../components/elements/point/DisplayPoint";
 
 const Play = () => {
   const { socket, roomId, socketId } = useSocket(); // useSocketを使用
@@ -315,11 +316,11 @@ const Play = () => {
         />
       </div>
       <MiniButton text="決定" handleClick={decisionClick} />
-      <div>結果 : {gameResult}</div>
-      <div>相手の手 : {enemyTitle}</div>
-      <div>
-        今の点数: あなた: {myScore}, 相手: {enemyScore}
-      </div>
+      <DisplayPoint
+        myPoint={myScore}
+        enemyPoint={enemyScore}
+        textSizeClass="text-[100px]"
+      />
       {showBattleText && (
         <div className="absolute inset-0 flex items-center justify-center bg-transparent z-50">
           <p className="text-9xl font-bold text-red-500 animate-pulse">勝負</p>
