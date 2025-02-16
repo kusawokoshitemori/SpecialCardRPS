@@ -1,6 +1,6 @@
 // app/layout.tsx
 import "../app/globals.css";
-import { SocketProvider } from "./components/contexts/socketContext2";
+import { SocketProvider } from "./components/contexts/socketContext";
 
 export const metadata = {
   title: "特殊カードジャンケン",

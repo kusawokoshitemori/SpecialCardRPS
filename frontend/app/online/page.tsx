@@ -4,7 +4,7 @@ import TitleRPS from "../components/features/SelectGame/TitleRPS";
 import Button from "../components/elements/button/Button";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useSocket } from "../components/contexts/socketContext2"; // 新しくsocketの機能をContextで行ってくれるやつ
+import { useSocket } from "../components/contexts/socketContext"; // 新しくsocketの機能をContextで行ってくれるやつ
 
 const Online = () => {
   const { isMatched, handleMatchStart } = useSocket();
