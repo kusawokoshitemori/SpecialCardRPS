@@ -40,6 +40,7 @@ const Play = () => {
   const [isReverse, setIsReverse] = useState(false); // リバースを選択していた場合勝敗が逆転する
   const [isBanSpecialCard, setIsBanSpecialCard] = useState(false); // 相手が封印を選択していた場合特殊カードが打てなくなる
   const [enemySpecialCard, setEnemySpecialCard] = useState("");
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     setSpecialTitle(randomSpecialTitle());
@@ -144,6 +145,14 @@ const Play = () => {
       socket?.off("round_result");
     };
   }, [socket, socketId, isReverse, isBanSpecialCard, enemySpecialCard]);
+
+  useEffect(() => {
+    if (enemySpecialCard) {
+      setTimeout(() => {
+        setShowModal(true);
+      }, 3000);
+    }
+  }, [enemySpecialCard]);
 
   // ゲーム終了時動作
   const router = useRouter();
@@ -318,6 +327,30 @@ const Play = () => {
       {showBattleText && (
         <div className="absolute inset-0 flex items-center justify-center bg-transparent z-50">
           <p className="text-9xl font-bold text-red-500 animate-pulse">勝負</p>
+        </div>
+      )}
+      {showModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div
+            className="p-10 rounded-lg shadow-lg flex flex-col justify-center items-center"
+            style={{ backgroundImage: "url('/backGround/treeBlue.jpg')" }}
+          >
+            {/* テキストを p で囲む */}
+            <p className="text-xl font-bold">相手の特殊カード</p>
+
+            {/* Card は独立させる */}
+            <Card
+              imageSrc={SearchSrc(enemySpecialCard)}
+              title={enemySpecialCard}
+            />
+
+            <button
+              onClick={() => setShowModal(false)}
+              className="mt-4 px-4 py-2 bg-red-500 text-white rounded-md"
+            >
+              閉じる
+            </button>
+          </div>
         </div>
       )}
     </div>
