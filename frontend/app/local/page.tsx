@@ -1,12 +1,13 @@
 "use client";
 import TitleRPS from "../components/features/SelectGame/TitleRPS";
 import Button from "../components/elements/button/Button";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSocket } from "../components/contexts/socketContext";
 
 const Local = () => {
-  const { isMatched, handleMatchStart } = useSocket();
+  const { isMatched, handleRocalMatchStart } = useSocket();
+  const [roomKey, setRoomKey] = useState("");
   const router = useRouter();
 
   // 3秒後に対戦画面に遷移
@@ -28,7 +29,8 @@ const Local = () => {
         className="py-3 px-4 block w-2/3 border-gray-200 rounded-lg text-2xl focus:border-blue-500 focus:ring-blue-500 hover:border-blue-300 disabled:opacity-50 disabled:pointer-events-none"
         rows={2}
         placeholder="合言葉を入力してください"
-        data-hs-textarea-auto-height=""
+        value={roomKey} // stateとバインド
+        onChange={(e) => setRoomKey(e.target.value)} // 入力値をstateに反映
       ></textarea>
 
       <Button
@@ -38,7 +40,7 @@ const Local = () => {
         bgColor="bg-amber-300"
         subTextColor="bg-yellow-600"
         addClass="my-4"
-        onClick={handleMatchStart}
+        onClick={() => handleRocalMatchStart(roomKey)}
       />
     </div>
   );

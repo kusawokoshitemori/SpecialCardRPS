@@ -9,6 +9,7 @@ interface SocketContextType {
   socketId: string;
   isMatched: boolean;
   handleMatchStart: () => void;
+  handleRocalMatchStart: (roomKey: string) => void;
 }
 
 const SocketContext = createContext<SocketContextType | undefined>(undefined);
@@ -48,22 +49,35 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
     };
   }, []);
 
-  // テスト
-  useEffect(() => {
-    if (socket) {
-      console.log("Socket インスタンス:", socket);
-    }
-  }, [socket]);
-
+  // オンライン対戦の時これ使用
   const handleMatchStart = () => {
     if (socket) {
-      socket.emit("start_matching", { username: "プレイヤー１" });
+      socket.emit("start_matching", {
+        username: "オンラインプレイヤー",
+        roomKey: "defaultwwkusawwwkusaww",
+      });
+    }
+  };
+  // ローカル対戦の時これ使用
+  const handleRocalMatchStart = (roomKey: string) => {
+    if (socket) {
+      socket.emit("start_matching", {
+        username: "ローカルプレイヤー",
+        roomKey: roomKey,
+      });
     }
   };
 
   return (
     <SocketContext.Provider
-      value={{ socket, roomId, socketId, isMatched, handleMatchStart }}
+      value={{
+        socket,
+        roomId,
+        socketId,
+        isMatched,
+        handleMatchStart,
+        handleRocalMatchStart,
+      }}
     >
       {children}
     </SocketContext.Provider>

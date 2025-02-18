@@ -33,13 +33,23 @@ io.on("connection", (socket) => {
   console.log("クライアントと接続しました");
 
   socket.on("start_matching", (data) => {
-    console.log(`マッチング待機中: ${data.username}`);
-    waitingPlayers.push({ socket, username: data.username });
+    const { username, roomKey } = data;
+    console.log(`マッチング待機中: ${username}`);
+
+    if (!roomKey) {
+      console.log(data.roomKey);
+      return;
+    }
+    // roomKeyがまだ存在しない場合は初期化
+    if (!waitingPlayers[roomKey]) {
+      waitingPlayers[roomKey] = [];
+    }
+    waitingPlayers[roomKey].push({ socket, username: username });
 
     // 他のプレイヤーとマッチング
-    if (waitingPlayers.length >= 2) {
-      const player1 = waitingPlayers.shift();
-      const player2 = waitingPlayers.shift();
+    if (waitingPlayers[roomKey].length >= 2) {
+      const player1 = waitingPlayers[roomKey].shift();
+      const player2 = waitingPlayers[roomKey].shift();
 
       // 被らないroomの名前
       const roomName = `room-${player1.socket.id}-${player2.socket.id}`;
@@ -76,7 +86,6 @@ io.on("connection", (socket) => {
 
       console.log(`ルーム作成: ${roomName}`);
       console.log(`マッチング成立: ${player1.username} vs ${player2.username}`);
-      // ここでroundCountを0にリセットする必要あるかも
       roundCount = 0;
     }
   });
