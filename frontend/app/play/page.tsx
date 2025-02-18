@@ -101,7 +101,6 @@ const Play = () => {
         console.log(`全知全能: ${data.myTitle}`);
         if (data.myTitle === "全知全能") {
           setEnemySpecialCard(data.mySpecial);
-          console.log("動いたやった");
         }
 
         if (data.result === "player1") {
@@ -130,7 +129,6 @@ const Play = () => {
         console.log(`全知全能: ${data.enemyTitle}`);
         if (data.enemyTitle2 === "全知全能") {
           setEnemySpecialCard(data.enemySpecial);
-          console.log("動いたやった");
         }
 
         // ここでsockeIdを用いてgameResultを分かりやすくする
@@ -335,10 +333,8 @@ const Play = () => {
             className="p-10 rounded-lg shadow-lg flex flex-col justify-center items-center"
             style={{ backgroundImage: "url('/backGround/treeBlue.jpg')" }}
           >
-            {/* テキストを p で囲む */}
             <p className="text-xl font-bold">相手の特殊カード</p>
 
-            {/* Card は独立させる */}
             <Card
               imageSrc={SearchSrc(enemySpecialCard)}
               title={enemySpecialCard}
