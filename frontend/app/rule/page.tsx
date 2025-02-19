@@ -1,17 +1,21 @@
 "use client";
 
 import { useState } from "react";
+import Button from "../components/elements/button/Button";
 import Card from "../components/elements/card/card";
 import SearchSrc from "../components/features/Play/SearchSrc";
+import { useRouter } from "next/navigation";
 
 const Rule = () => {
   const [activeTab, setActiveTab] = useState(1);
-
-  console.log(SearchSrc("グー"));
+  const router = useRouter();
+  const handleBackTitle = () => {
+    router.push("selectGame");
+  };
 
   return (
-    <div className="h-screen w-full flex justify-center items-center">
-      <div className="w-2/3 bg-white rounded-lg shadow-md dark:bg-neutral-800">
+    <div className="h-screen w-full flex justify-center items-center flex-col">
+      <div className="w-2/3 bg-white rounded-lg shadow-md dark:bg-neutral-800 mt-24">
         <div className="border-b border-gray-200 px-4 dark:border-neutral-700">
           <nav className="flex gap-x-2" aria-label="Tabs" role="tablist">
             {[1, 2, 3].map((tab) => (
@@ -27,7 +31,7 @@ const Rule = () => {
                 role="tab"
                 aria-selected={activeTab === tab}
               >
-                Tab {tab}
+                Step {tab}
               </button>
             ))}
           </nav>
@@ -119,6 +123,15 @@ const Rule = () => {
           )}
         </div>
       </div>
+      <Button
+        text="タイトルへ"
+        subText1="試合選択画面に戻ります"
+        subText2="ゲーム選択画面へ"
+        bgColor="bg-emerald-200"
+        subTextColor="bg-green-400"
+        addClass="my-12"
+        onClick={handleBackTitle}
+      />
     </div>
   );
 };
