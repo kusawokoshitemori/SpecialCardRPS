@@ -1,9 +1,13 @@
 "use client";
 
 import { useState } from "react";
+import Card from "../components/elements/card/card";
+import SearchSrc from "../components/features/Play/SearchSrc";
 
 const Rule = () => {
   const [activeTab, setActiveTab] = useState(1);
+
+  console.log(SearchSrc("グー"));
 
   return (
     <div className="h-screen w-full flex justify-center items-center">
@@ -34,33 +38,82 @@ const Rule = () => {
           {activeTab === 1 && (
             <div role="tabpanel">
               <p className="text-gray-500 dark:text-neutral-400">
-                This is the{" "}
-                <em className="font-semibold text-gray-800 dark:text-neutral-200">
-                  first
-                </em>{" "}
-                items tab body.
+                <div className="flex flex-col">
+                  <div className="flex justify-center">
+                    <Card
+                      imageSrc={SearchSrc("グー")}
+                      title="グー"
+                      className="mx-2"
+                    />
+                    <Card
+                      imageSrc={SearchSrc("チョキ")}
+                      title="チョキ"
+                      className="mx-2"
+                    />
+                    <Card
+                      imageSrc={SearchSrc("パー")}
+                      title="パー"
+                      className="mx-2"
+                    />
+                  </div>
+                  <p className="flex justify-center my-4 text-xl font-bold">
+                    カードを使用してジャンケンをするよ
+                  </p>
+                </div>
               </p>
             </div>
           )}
           {activeTab === 2 && (
             <div role="tabpanel">
               <p className="text-gray-500 dark:text-neutral-400">
-                This is the{" "}
-                <em className="font-semibold text-gray-800 dark:text-neutral-200">
-                  second
-                </em>{" "}
-                items tab body.
+                <div className="flex flex-col">
+                  <div className="flex justify-center">
+                    <Card
+                      imageSrc={SearchSrc("グー")}
+                      title="グー"
+                      className="mx-2"
+                    />
+                    <p className="flex justify-center items-center text-4xl mx-6">
+                      VS
+                    </p>
+                    <Card
+                      imageSrc={SearchSrc("パー")}
+                      title="パー"
+                      className="mx-2"
+                    />
+                  </div>
+                  <p className="flex justify-center my-4 text-xl font-bold">
+                    3ポイント先に獲得したほうが勝ちだよ
+                  </p>
+                </div>
               </p>
             </div>
           )}
           {activeTab === 3 && (
             <div role="tabpanel">
               <p className="text-gray-500 dark:text-neutral-400">
-                This is the{" "}
-                <em className="font-semibold text-gray-800 dark:text-neutral-200">
-                  third
-                </em>{" "}
-                items tab body.
+                <div className="flex flex-col">
+                  <div className="flex justify-center">
+                    <Card
+                      imageSrc={SearchSrc("ミラー")}
+                      title="ミラー"
+                      className="mx-2"
+                    />
+                    <Card
+                      imageSrc={SearchSrc("無限の手")}
+                      title="無限の手"
+                      className="mx-2"
+                    />
+                    <Card
+                      imageSrc={SearchSrc("リバース")}
+                      title="リバース"
+                      className="mx-2"
+                    />
+                  </div>
+                  <p className="flex justify-center my-4 text-xl font-bold">
+                    特殊カードも使用して勝利をつかもう
+                  </p>
+                </div>
               </p>
             </div>
           )}
