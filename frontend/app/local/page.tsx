@@ -40,7 +40,13 @@ const Local = () => {
         bgColor="bg-amber-300"
         subTextColor="bg-yellow-600"
         addClass="my-4"
-        onClick={() => handleRocalMatchStart(roomKey)}
+        onClick={() => {
+          if (!roomKey.trim()) {
+            alert("合言葉を入力してください");
+            return;
+          }
+          handleRocalMatchStart(roomKey);
+        }}
       />
     </div>
   );
