@@ -41,10 +41,21 @@ const Play = () => {
   const [isBanSpecialCard, setIsBanSpecialCard] = useState(false); // 相手が封印を選択していた場合特殊カードが打てなくなる
   const [enemySpecialCard, setEnemySpecialCard] = useState("");
   const [showModal, setShowModal] = useState(false);
+  const [randomSelectCard, setRandomSelectCard] = useState(false);
 
   useEffect(() => {
     setSpecialTitle(randomSpecialTitle());
   }, []);
+
+  // randomで選択するコード
+  const randomInt = Math.floor(Math.random() * 3);
+  useEffect(() => {
+    if (randomSelectCard === false) return;
+    if (randomInt === 0) {
+      if (items["グー"] >= 1) {
+      }
+    }
+  }, [randomSelectCard, randomInt, items]);
 
   const handleDisplayResult = useCallback(() => {
     setShowBattleText(true); // 勝負表示開始
@@ -275,7 +286,10 @@ const Play = () => {
         })`,
       }}
     >
-      <Timer isTimerStop={isDecision} />
+      <Timer
+        isTimerStop={isDecision}
+        setRandomSelectCard={setRandomSelectCard}
+      />
       <div className="flex flex-row">
         {/* 自分のカード */}
         {myHandSrc ? (
