@@ -41,7 +41,7 @@ const Rule = () => {
         <div className="mt-3 p-4">
           {activeTab === 1 && (
             <div role="tabpanel">
-              <p className="text-gray-500 dark:text-neutral-400">
+              <div className="text-gray-500 dark:text-neutral-400">
                 <div className="flex flex-col">
                   <div className="flex justify-center">
                     <Card
@@ -64,12 +64,12 @@ const Rule = () => {
                     カードを使用してジャンケンをするよ
                   </p>
                 </div>
-              </p>
+              </div>
             </div>
           )}
           {activeTab === 2 && (
             <div role="tabpanel">
-              <p className="text-gray-500 dark:text-neutral-400">
+              <div className="text-gray-500 dark:text-neutral-400">
                 <div className="flex flex-col">
                   <div className="flex justify-center">
                     <Card
@@ -90,12 +90,12 @@ const Rule = () => {
                     3ポイント先に獲得したほうが勝ちだよ
                   </p>
                 </div>
-              </p>
+              </div>
             </div>
           )}
           {activeTab === 3 && (
             <div role="tabpanel">
-              <p className="text-gray-500 dark:text-neutral-400">
+              <div className="text-gray-500 dark:text-neutral-400">
                 <div className="flex flex-col">
                   <div className="flex justify-center">
                     <Card
@@ -118,7 +118,7 @@ const Rule = () => {
                     特殊カードも使用して勝利をつかもう
                   </p>
                 </div>
-              </p>
+              </div>
             </div>
           )}
         </div>
