@@ -15,7 +15,7 @@ const Card: React.FC<CardProps> = ({ imageSrc, title, className, onClick }) => {
   return (
     <div
       className={classNames(
-        "flex items-center justify-center flex-col max-w-xs w-32 h-48 bg-white rounded-lg shadow-md overflow-hidden",
+        "flex items-center justify-center flex-col max-w-xs w-32 h-48 bg-white rounded-lg shadow-md overflow-hidden border-2 border-black",
         className
       )}
       onClick={onClick ? (event) => onClick(event) : undefined}

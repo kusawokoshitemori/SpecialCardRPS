@@ -24,8 +24,8 @@ const Timer = ({ isTimerStop, setRandomSelectCard }: TimerProps) => {
   return (
     <div className="flex flex-col justify-center items-center">
       <p className="font-bold text-2xl">残り</p>
-      <div className="bg-indigo-800 text-white text-4xl font-bold rounded-lg w-12 h-16 flex items-center justify-center my-4">
-        {seconds}
+      <div className="bg-indigo-800 text-white text-4xl font-bold rounded-lg h-16 flex items-center justify-center p-4 my-4">
+        {String(seconds).padStart(3, "0")}
       </div>
     </div>
   );
