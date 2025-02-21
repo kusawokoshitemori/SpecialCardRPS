@@ -44,6 +44,19 @@ io.on("connection", (socket) => {
     if (!waitingPlayers[roomKey]) {
       waitingPlayers[roomKey] = [];
     }
+    if (waitingPlayers[roomKey].some((player) => player.socket === socket)) {
+      // socketが一致するプレイヤーのインデックスを取得
+      const playerIndex = waitingPlayers[roomKey].findIndex(
+        (player) => player.socket === socket
+      );
+
+      if (playerIndex !== -1) {
+        waitingPlayers[roomKey].splice(playerIndex, 1);
+        console.log("あるプレイヤーがゲーム待機画面から退出しました");
+        return;
+      }
+    }
+
     waitingPlayers[roomKey].push({ socket, username: username });
 
     // 他のプレイヤーとマッチング
