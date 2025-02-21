@@ -209,7 +209,8 @@ const Play = () => {
     }
   }, [gameResult, gameGetPoint, handleDisplayResult]);
 
-  const decisionClick = () => {
+  // 決定ボタンを押したときの反応
+  const decisionClickCheck = () => {
     if (isDecision) {
       alert("カードは既に選択されています");
       return;
@@ -219,7 +220,6 @@ const Play = () => {
       setIsDecision(false);
       return;
     }
-
     // グー、チョキ、パー以外はspecialとして扱う配列
     const adjustTitle = (title: string) => {
       if (title === "グー") return "グー";
@@ -241,7 +241,10 @@ const Play = () => {
       ...prevItems, // 他のキーを維持
       [adjustTitle(myTitle)]: Math.max(0, prevItems[adjustTitle(myTitle)] - 1), // 動的にキーを決めて値を減らす
     }));
-
+    return;
+  };
+  useEffect(() => {
+    if (isDecision === false) return;
     // バックエンドに出した手のデータを送る
     socket?.emit("player_choice", {
       roomName: roomId, // サーバーから受け取ったルーム名
@@ -251,10 +254,9 @@ const Play = () => {
       isBanSpecialCard,
       specialTitle,
     });
-    console.log(
-      `roomId: ${roomId}, socket.id: ${socketId}, choice: ${myTitle}, isReverse: ${isReverse}, isBunSpecialCard: ${isBanSpecialCard}`
-    );
-  };
+    // 依存関係の警告無視してる
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isDecision]);
 
   const rockCardClick = () => {
     if (isDecision) return;
@@ -330,7 +332,7 @@ const Play = () => {
           onClick={specialCardClick}
         />
       </div>
-      <MiniButton text="決定" handleClick={decisionClick} />
+      <MiniButton text="決定" handleClick={decisionClickCheck} />
       <DisplayPoint
         myPoint={myScore}
         enemyPoint={enemyScore}
