@@ -4,14 +4,17 @@ interface TimerProps {
   isTimerStop: boolean;
   setRandomSelectCard: React.Dispatch<React.SetStateAction<boolean>>;
 }
-
+const prepareTime = 60;
 const Timer = ({ isTimerStop, setRandomSelectCard }: TimerProps) => {
-  const [seconds, setSeconds] = useState(60); // カウントダウンの秒数
+  const [seconds, setSeconds] = useState(prepareTime); // カウントダウンの秒数
   useEffect(() => {
-    if (isTimerStop === true) return;
+    if (isTimerStop === true) {
+      setSeconds(prepareTime);
+    }
 
     if (seconds === 0) {
       setRandomSelectCard(true);
+      setSeconds(prepareTime);
       return;
     }
     const intervalId = setInterval(() => {

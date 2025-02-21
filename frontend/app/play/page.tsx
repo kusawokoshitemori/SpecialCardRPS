@@ -47,16 +47,6 @@ const Play = () => {
     setSpecialTitle(randomSpecialTitle());
   }, []);
 
-  // randomで選択するコード
-  const randomInt = Math.floor(Math.random() * 3);
-  useEffect(() => {
-    if (randomSelectCard === false) return;
-    if (randomInt === 0) {
-      if (items["グー"] >= 1) {
-      }
-    }
-  }, [randomSelectCard, randomInt, items]);
-
   const handleDisplayResult = useCallback(() => {
     setShowBattleText(true); // 勝負表示開始
     setTimeout(() => {
@@ -243,8 +233,39 @@ const Play = () => {
     }));
     return;
   };
+  // 流石にジャンケンの手を決めるコードは別ファイルに作りたいかな
+  const randomDecideRPS = useCallback(() => {
+    const getRandomItem = () => {
+      const total = items["グー"] + items["チョキ"] + items["パー"];
+      let rand = Math.random() * total;
+
+      if (rand < items["グー"]) {
+        items["グー"]--;
+        return "グー";
+      }
+      rand -= items["グー"];
+      if (rand < items["チョキ"]) {
+        items["チョキ"]--;
+        return "チョキ";
+      }
+      items["パー"]--;
+      return "パー"; // 最後にパーを返す
+    };
+
+    const result = getRandomItem();
+    if (result) setMyTitle(result);
+    setMyHandSrc(SearchSrc(result));
+    setIsDecision(true);
+  }, [items, setMyTitle, setIsDecision]);
+
+  useEffect(() => {
+    if (!randomSelectCard) return;
+    randomDecideRPS();
+  }, [randomSelectCard, randomDecideRPS]);
+
   useEffect(() => {
     if (isDecision === false) return;
+    console.log("動いた");
     // バックエンドに出した手のデータを送る
     socket?.emit("player_choice", {
       roomName: roomId, // サーバーから受け取ったルーム名
