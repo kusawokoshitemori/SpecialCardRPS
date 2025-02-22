@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useSocket } from "../components/contexts/socketContext";
 
 const Local = () => {
+  const [waitMatch, setWaitMatch] = useState<boolean>(false);
   const { isMatched, handleRocalMatchStart } = useSocket();
   const [roomKey, setRoomKey] = useState("");
   const router = useRouter();
@@ -24,7 +25,13 @@ const Local = () => {
   return (
     <div className="flex flex-col justify-center items-center">
       <TitleRPS />
-      <p>{isMatched ? "マッチング成功！対戦を開始します" : "待機中..."}</p>
+      <p>
+        {isMatched
+          ? "マッチング成功！対戦を開始します"
+          : waitMatch
+          ? "マッチング待機中..."
+          : ""}
+      </p>
       <textarea
         className="py-3 px-4 block w-2/3 border-gray-200 rounded-lg text-2xl focus:border-blue-500 focus:ring-blue-500 hover:border-blue-300 disabled:opacity-50 disabled:pointer-events-none"
         rows={2}
@@ -45,6 +52,7 @@ const Local = () => {
             alert("合言葉を入力してください");
             return;
           }
+          setWaitMatch((prev) => !prev);
           handleRocalMatchStart(roomKey);
         }}
       />
