@@ -1,6 +1,7 @@
 // app/layout.tsx
 import "../app/globals.css";
 import { SocketProvider } from "./components/contexts/socketContext";
+import Header from "./components/layouts/header";
 
 export const metadata = {
   title: "特殊カードジャンケン",
@@ -15,7 +16,10 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <body>
-        <SocketProvider>{children}</SocketProvider>
+        <SocketProvider>
+          <Header />
+          {children}
+        </SocketProvider>
       </body>
     </html>
   );
