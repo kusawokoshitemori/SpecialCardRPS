@@ -21,7 +21,7 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
   const [isMatched, setIsMatched] = useState(false);
 
   useEffect(() => {
-    const newSocket = io("https://render.com/docs/web-services#port-binding", {
+    const newSocket = io("http://localhost:4000", {
       autoConnect: true,
       reconnection: true,
     });

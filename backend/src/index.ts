@@ -1,5 +1,4 @@
 import winTable from "./data/winTable";
-import cors from "cors";
 
 const express = require("express");
 const app = express();
@@ -7,29 +6,13 @@ const app = express();
 const http = require("http");
 const server = http.createServer(app);
 const { Server } = require("socket.io");
-
-// CORS 設定
-app.use(
-  cors({
-    origin: "https://special-card-rps-jet.vercel.app", // フロントエンドの URL を指定
-    methods: ["GET", "POST"],
-    allowedHeaders: ["Content-Type"],
-  })
-);
-
 const io = new Server(server, {
   cors: {
-    origin: ["https://special-card-rps-jet.vercel.app/"],
-    methods: ["GET", "POST"],
+    origin: ["http://192.168.0.30:3000"],
   },
 });
 
-const PORT = process.env.PORT || 4000;
-if (!server.listening) {
-  server.listen(PORT, () => {
-    console.log(`サーバーがポート ${PORT} で起動しました`);
-  });
-}
+const PORT = 4000;
 
 const waitingPlayers = [];
 const gameRooms = {}; // ルームごとの情報を管理
