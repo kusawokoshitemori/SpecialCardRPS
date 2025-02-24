@@ -19,7 +19,7 @@ app.use(
 
 const io = new Server(server, {
   cors: {
-    origin: "https://special-card-rps-jet.vercel.app",
+    origin: ["https://special-card-rps-jet.vercel.app/"],
   },
 });
 
