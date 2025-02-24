@@ -12,7 +12,10 @@ const io = new Server(server, {
   },
 });
 
-const PORT = 4000;
+const PORT = process.env.PORT || 4000;
+server.listen(PORT, () => {
+  console.log(`サーバーが起動しました PORT = ${PORT}`);
+});
 
 const waitingPlayers = [];
 const gameRooms = {}; // ルームごとの情報を管理
