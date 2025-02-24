@@ -21,7 +21,7 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
   const [isMatched, setIsMatched] = useState(false);
 
   useEffect(() => {
-    const newSocket = io("http://localhost:4000", {
+    const newSocket = io("https://specialcardrps.onrender.com", {
       autoConnect: true,
       reconnection: true,
     });
