@@ -1,4 +1,5 @@
 import winTable from "./data/winTable";
+import cors from "cors";
 
 const express = require("express");
 const app = express();
@@ -6,9 +7,19 @@ const app = express();
 const http = require("http");
 const server = http.createServer(app);
 const { Server } = require("socket.io");
+
+// CORS 設定
+app.use(
+  cors({
+    origin: "https://special-card-rps-jet.vercel.app", // フロントエンドの URL を指定
+    methods: ["GET", "POST"],
+    allowedHeaders: ["Content-Type"],
+  })
+);
+
 const io = new Server(server, {
   cors: {
-    origin: ["https://special-card-rps-jet.vercel.app/"],
+    origin: "https://special-card-rps-jet.vercel.app",
   },
 });
 
