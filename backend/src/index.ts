@@ -1,18 +1,19 @@
 import winTable from "./data/winTable";
+import { createServer } from "http";
+import { Server } from "socket.io";
 
-const express = require("express");
-const app = express();
+const httpServer = createServer();
 
-const http = require("http");
-const server = http.createServer(app);
-const { Server } = require("socket.io");
-const io = new Server(server, {
+const io = new Server(httpServer, {
   cors: {
-    origin: ["http://192.168.0.30:3000"],
+    origin: ["https://special-card-rps-jet.vercel.app/"], // 許可するフロントエンドのURL
   },
 });
 
-const PORT = 4000;
+const PORT = process.env.PORT || 4000; // Renderで自動的に設定されたPORTを使用
+httpServer.listen(PORT, () => {
+  console.log(`サーバーに接続しました PORT = ${PORT}`);
+});
 
 const waitingPlayers = [];
 const gameRooms = {}; // ルームごとの情報を管理
@@ -196,5 +197,3 @@ io.on("connection", (socket) => {
     }
   });
 });
-
-server.listen(PORT, () => console.log(`サーバーに接続しました PORT = ${PORT}`));
