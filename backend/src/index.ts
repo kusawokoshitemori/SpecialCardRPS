@@ -12,6 +12,13 @@ const io = new Server(server, {
   },
 });
 
+const PORT = process.env.PORT || 4000;
+if (!server.listening) {
+  server.listen(PORT, () => {
+    console.log(`サーバーがポート ${PORT} で起動しました`);
+  });
+}
+
 const waitingPlayers = [];
 const gameRooms = {}; // ルームごとの情報を管理
 
@@ -195,7 +202,4 @@ io.on("connection", (socket) => {
   });
 });
 
-const PORT = process.env.PORT || 4000;
-server.listen(PORT, () => {
-  console.log(`サーバーが起動しました PORT = ${PORT}`);
-});
+server.listen(PORT, () => console.log(`サーバーに接続しました PORT = ${PORT}`));
