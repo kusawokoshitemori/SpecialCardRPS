@@ -21,6 +21,9 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
   const [isMatched, setIsMatched] = useState(false);
 
   useEffect(() => {
+    console.log("環境変数一覧:", process.env); // 消す
+    console.log("API URL:", process.env.REACT_APP_API_URL); // 消す
+
     const newSocket = io("http://localhost:4000", {
       autoConnect: true,
       reconnection: true,
