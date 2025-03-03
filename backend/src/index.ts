@@ -14,8 +14,6 @@ const io = new Server(server, {
   },
 });
 
-const PORT = 4000;
-
 const waitingPlayers = [];
 const gameRooms = {}; // ルームごとの情報を管理
 
@@ -199,4 +197,6 @@ io.on("connection", (socket) => {
   });
 });
 
-server.listen(PORT, () => console.log(`サーバーに接続しました PORT = ${PORT}`));
+server.listen(process.env.PORT, () =>
+  console.log(`サーバーに接続しました PORT = ${process.env.PORT}`)
+);
