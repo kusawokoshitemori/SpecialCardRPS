@@ -1,6 +1,7 @@
 import winTable from "./data/winTable";
 
 const express = require("express");
+const cors = require("cors");
 const app = express();
 
 const http = require("http");
@@ -8,6 +9,14 @@ const server = http.createServer(app);
 const { Server } = require("socket.io");
 
 require("dotenv").config();
+
+app.use(
+  cors({
+    origin: process.env.CORS_ORIGIN,
+    methods: ["GET", "POST"],
+  })
+);
+
 const io = new Server(server, {
   cors: {
     origin: process.env.CORS_ORIGIN,
@@ -197,6 +206,6 @@ io.on("connection", (socket) => {
   });
 });
 
-server.listen(process.env.PORT, () =>
-  console.log(`サーバーに接続しました PORT = ${process.env.PORT}`)
-);
+const PORT = process.env.PORT || 4000;
+
+server.listen(PORT, () => console.log(`サーバーに接続しました PORT = ${PORT}`));
