@@ -22,6 +22,7 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     const newSocket = io(process.env.NEXT_PUBLIC_BACKEND_URL, {
+      transports: ["polling"],
       autoConnect: true,
       reconnection: true,
       withCredentials: true,
