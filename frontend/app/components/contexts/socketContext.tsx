@@ -24,6 +24,7 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
     const newSocket = io(process.env.NEXT_PUBLIC_BACKEND_URL, {
       autoConnect: true,
       reconnection: true,
+      withCredentials: true,
     });
 
     newSocket.on("connect", () => {
