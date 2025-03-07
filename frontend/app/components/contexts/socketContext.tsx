@@ -10,6 +10,7 @@ interface SocketContextType {
   isMatched: boolean;
   handleMatchStart: () => void;
   handleRocalMatchStart: (roomKey: string) => void;
+  resetMatch: () => void;
 }
 
 const SocketContext = createContext<SocketContextType | undefined>(undefined);
@@ -69,6 +70,10 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
       });
     }
   };
+  const resetMatch = () => {
+    console.log("setIsMatchedをfalseに変更します");
+    setIsMatched(false);
+  };
 
   return (
     <SocketContext.Provider
@@ -79,6 +84,7 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
         isMatched,
         handleMatchStart,
         handleRocalMatchStart,
+        resetMatch,
       }}
     >
       {children}

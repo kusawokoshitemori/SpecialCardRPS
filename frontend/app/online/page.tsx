@@ -49,4 +49,3 @@ const Online = () => {
 };
 
 export default Online;
-// {handleMatchStart}

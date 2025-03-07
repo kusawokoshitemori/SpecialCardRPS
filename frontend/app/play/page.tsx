@@ -15,7 +15,7 @@ import { useRouter } from "next/navigation";
 import DisplayPoint from "../components/elements/point/DisplayPoint";
 
 const Play = () => {
-  const { socket, roomId, socketId } = useSocket(); // useSocketを使用
+  const { socket, roomId, socketId, resetMatch } = useSocket(); // useSocketを使用
 
   const [myHandSrc, setMyHandSrc] = useState("");
   const [myTitle, setMyTitle] = useState("");
@@ -45,7 +45,8 @@ const Play = () => {
 
   useEffect(() => {
     setSpecialTitle(randomSpecialTitle());
-  }, []);
+    resetMatch();
+  }, [resetMatch]);
 
   const handleDisplayResult = useCallback(() => {
     setShowBattleText(true); // 勝負表示開始
